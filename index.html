@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Elemental Incremental</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <!-- import the webpage's stylesheet -->
+    <link rel="stylesheet" href="/graphics.css">
+    
+    <!-- import the webpage's javascript file -->
+    <script src="/game.js" defer></script>
+  </head>  
+  <body>
+    
+    <div id="navigateButtons">
+      <button class="Btab1" onclick="tab('tabO1')">Options</button>
+			<button class="Btab1" onclick="tab('tabC1')">Changelog</button>
+			<button class="Btab2" onclick="tab('tab1')">Subatomic Particles</button>
+			<button class="Btab3" onclick="tab('tab2')">Atoms</button>
+      <button class="Btab4" id="unlock1" visibility="hidden" onclick="tab('tabU1')">Basic Atomic Upgrades</button>
+		</div><br><br>
+    
+    
+      
+    You have <span id = "energyDisplay">0</span> energy. <br>
+    <button class = "Bene" onclick = "tap(game.clickPower * game.Hpower)">
+      Click for energy
+    </button><br>
+    You get <span id = "clickD">1</span> energy per click.
+    <br><br><br>
+    
+    
+     <div id = "tab1">
+    
+    <co class = "Cpro">Spend <span id = "protonC">20</span> energy to make a proton.<br>
+    <button class = "Bpro" onclick = "makeProton()">
+      Make a proton!
+    </button>
+    <button class = "Bpro" onclick = "makeMaxProtons()">
+      Make as many protons as you can make with your energy!
+    </button><br>
+    You have <span id = "protonD">0</span> protons.<br>
+    They are producing <span id = "protonP">0</span> energy per second.
+       </co><br><br><br>
+    
+    <co class = "Cele">Spend <span id = "electronC">50</span> energy to make an electron.<br>
+    <button class = "Bele" onclick = "makeElectron()">
+      Make an electron!
+    </button>
+    <button class = "Bele" onclick = "makeMaxElectrons()">
+      Make as many electrons as you can make with your energy!
+    </button><br>
+    You have <span id = "electronD">0</span> electrons.<br>
+       They add <span id = "electronP">0</span> to your energy per click.
+       </co><br><br>
+      
+       <subdiv id="tab1a">
+       <button class = "Bnuv" onclick="w2b()">
+         Unlock neutrinos
+         </button><co class ="Cnuv">Cost: 10000 energy</co>
+         </subdiv><br>
+      <subdiv id ="tab1b"><co class ="Cnuv">
+      Spend <span id = "neutrinoC">100000</span> energy to make a neutrino.<br>
+    <button class = "Bnuv" onclick = "makeNeutrino()">
+      Make a neutrino!
+    </button>
+    <button class = "Bnuv" onclick = "makeMaxNeutrinos()">
+      Make as many neutrinos as you can make with your energy!
+    </button><br>
+    You have <span id = "neutrinoD">0</span> neutrinos.<br>
+        They are boosting the production of energy from all sources by <span id = "neutrinoP">1</span>x.
+      </co></subdiv><br><br>
+       
+       <subdiv id="tab1c">
+         <button class = "Bnun" onclick="w3b()">Coming soon!</button>
+       </subdiv>
+    
+    </div>
+    
+    
+    <div id = "tab2">
+      
+    Reset your progress in exchange for some Hydrogen Atoms (Protium).<br>
+      You will get as many Hydrogen Atoms (Protium) as the minimum of your protons and electrons.<br>
+    <button onclick = "p1()">
+      Make some Hydrogen Atoms in exchange for your progress!
+    </button> <br>
+    You have <span id = "HpD">0</span> Hydrogen Atoms (Protium).<br>
+    They boost your total energy production by the square root of their amount. 
+      You are getting a <span id = "HpP">0</span>% boost to your energy production by your Hydrogen Atom (Protium) amount.
+    <br><br><br>
+    </div>
+    
+    
+    <div id="tab3">
+      
+    </div>
+    
+    
+    <div id = "tabU1">
+      <button onclick = "u1b()">
+      Purchased: <span id = "u1p">false</span>
+      </button> Double the speed of protons. Cost: 100 Hydrogen Atoms (Protium). <br>
+    </div>
+    
+    
+    <div id = "tabO1">
+			Manual Save:  <button onclick = "save()">save</button><br>
+		<br><br>
+      Numbers equal to or greater 1 million will be displayed using <span id="sigFigD">4</span> significant figures.<br>
+      <button onclick="changeSigFigs(-1)">-</button>
+      <button onclick="changeSigFigs(1)">+</button>
+      <br><br><br><br>
+		        Hard Reset (WARNING: WHEN CLICKING THIS BUTTON, YOU HARD RESET YOUR SAVE. YOUR PREVIOUS SAVE'S DATA WILL NOT BE RECOVERED.) : <button onclick = "hardReset()">HARD RESET</button>
+		</div>
+    
+    
+    <div id = "tabC1">
+      Note: This software is licensed under the <a href="https://www.apache.org/licenses/LICENSE-2.0.html">Apache License 2.0</a>.<br>
+      This means you can do anything you want with the software as long as you credit me for the original and state that you made a change to this software.
+      <br><br><br>
+      v0.1 alpha: 1-11-2020: Started making this game.<br>
+      v1.0 beta: 1-11-2020: Added Hydrogen Atoms (Protium). <br>
+      v1.0.1 beta: 1-11-2020: Added the first Basic Atomic Upgrade. <br>
+      v1.1 beta: 1-12-2020: Saving now works!<br>
+      v1.2 beta: 3-16-2020: I've been revamping the code for a while, and have gotten pre-prestige to work.<br>
+      v1.2.1 beta: 3-11-2022 (Yes that's 2022, not 2020): Continued to refactor the code and the 100 protium upgrade now works.<br>
+      v1.3: 3-14-2022: Added neutrinos! Also added formatting options and a software license, and fixed many bugs.<br>
+    </div>
+  </body>
+</html>
