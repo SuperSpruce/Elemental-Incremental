@@ -1,0 +1,218 @@
+/* CSS files add styling rules to your content */
+
+body {
+  font-family: helvetica, arial, sans-serif;
+  font-size: 16px;
+  margin: 2em;
+  color: #eeeeee;
+  background-color: #222222;
+}
+
+h1 {
+  font-style: italic;
+  color: #373fff;
+}
+
+
+co.Cpro {
+  /*font-style: */
+  color: #f75050;
+}
+
+co.Cele {
+  color: #eeee00;
+}
+co.Cnuv {
+  color: #8883ee;
+}
+
+
+button.Bene {
+  border: none;
+  border-radius: 32px;
+  padding: 4px 32px;
+  margin: 4px 4px;
+  font-size: 24px;
+  color: #111111;
+  background-color: #44dd44;
+}
+button.Bene:hover {
+  border: none;
+  border-radius: 32px;
+  padding: 4px 32px;
+  margin: 4px 4px;
+  font-size: 24px;
+  color: #111111;
+  background-color: #66ff66;
+  cursor: pointer;
+}
+
+button.Bpro {
+  border: none;
+  border-radius: 32px;
+  padding: 4px 32px;
+  margin: 4px 4px;
+  font-size: 20px;
+  color: #111111;
+  background-color: #dd4444;
+}
+button.Bpro:hover {
+  border: none;
+  border-radius: 32px;
+  padding: 4px 32px;
+  margin: 4px 4px;
+  font-size: 20px;
+  color: #111111;
+  background-color: #ff6666;
+  cursor: pointer;
+}
+
+button.Bele {
+  border: none;
+  border-radius: 32px;
+  padding: 4px 32px;
+  margin: 4px 4px;
+  font-size: 20px;
+  color: #111111;
+  background-color: #cccc00;
+}
+button.Bele:hover {
+  border: none;
+  border-radius: 32px;
+  padding: 4px 32px;
+  margin: 4px 4px;
+  font-size: 20px;
+  color: #111111;
+  background-color: #ffff00;
+  cursor: pointer;
+}
+
+button.Bnuv {
+  border: none;
+  border-radius: 32px;
+  padding: 4px 32px;
+  margin: 4px 4px;
+  font-size: 20px;
+  color: #111111;
+  background-color: #aaaaee;
+}
+button.Bnuv:hover {
+  border: none;
+  border-radius: 32px;
+  padding: 4px 32px;
+  margin: 4px 4px;
+  font-size: 20px;
+  color: #111111;
+  background-color: #ccccff;
+  cursor: pointer;
+}
+
+button.Bnun {
+  border: none;
+  border-radius: 32px;
+  padding: 4px 32px;
+  margin: 4px 4px;
+  font-size: 20px;
+  color: #111111;
+  background-color: #66bbee;
+}
+button.Bnun:hover {
+  border: none;
+  border-radius: 32px;
+  padding: 4px 32px;
+  margin: 4px 4px;
+  font-size: 20px;
+  color: #111111;
+  background-color: #99ddff;
+  cursor: pointer;
+}
+
+
+
+.Btab1 {
+  border: 4px solid #444444;
+  padding: 8px 20px;
+  margin: 0px -2px;
+  font-size: 20px;
+  font-weight: bold;
+  transform: skew(-10deg);
+  color: #000000;
+  background-color: #dddddd;
+}
+.Btab1:hover {
+  border: 4px solid #007700;
+  padding: 8px 20px;
+  margin: 0px -2px;
+  font-size: 20px;
+  font-weight: bold;
+  transform: skew(-10deg);
+  color: #000000;
+  background-color: #ffffff;
+  cursor: pointer;
+}
+
+.Btab2 {
+  border: 4px solid #ee4444;
+  padding: 8px 20px;
+  margin: 0px -2px;
+  font-size: 20px;
+  font-weight: bold;
+  transform: skew(-10deg);
+  color: #000000;
+  background-color: #dd6666;
+}
+.Btab2:hover {
+  border: 4px solid #ff2222;
+  padding: 8px 20px;
+  margin: 0px -2px;
+  font-size: 20px;
+  font-weight: bold;
+  transform: skew(-10deg);
+  color: #000000;
+  background-color: #dd8888;
+  cursor: pointer;
+}
+
+.Btab3 {
+  border: 4px solid #ee7744;
+  padding: 8px 20px;
+  margin: 0px -2px;
+  font-size: 20px;
+  font-weight: bold;
+  transform: skew(-10deg);
+  color: #000000;
+  background-color: #dd8866;
+}
+.Btab3:hover {
+  border: 4px solid #ff8822;
+  padding: 8px 20px;
+  margin: 0px -2px;
+  font-size: 20px;
+  font-weight: bold;
+  transform: skew(-10deg);
+  color: #000000;
+  background-color: #ee9944;
+  cursor: pointer;
+}
+
+.Btab4 {
+  border: 4px solid #eebb44;
+  padding: 8px 20px;
+  margin: 0px -2px;
+  font-size: 20px;
+  font-weight: bold;
+  transform: skew(-10deg);
+  color: #000000;
+  background-color: #ddaa66;
+}
+.Btab4:hover {
+  border: 4px solid #ff9922;
+  padding: 8px 20px;
+  margin: 0px -2px;
+  font-size: 20px;
+  font-weight: bold;
+  transform: skew(-10deg);
+  color: #000000;
+  background-color: #eebb44;
+  cursor: pointer;
+}
