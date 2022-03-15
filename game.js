@@ -561,6 +561,7 @@ function hardReset() {
   game.sigFigs = 4;
   
     updateEverything();
+    updateProtonSpeed();
 }
 
 
