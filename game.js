@@ -525,6 +525,7 @@ function hardReset() {
   clearInterval(game.protonInterval);
   
   game.energy = 0;
+  game.totalEnergy = 0;
   game.proton = 0;
   game.protonPower = 0;
   game.protonInterval = false;
