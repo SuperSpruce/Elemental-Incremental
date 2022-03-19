@@ -11,12 +11,13 @@
     
     <!-- import the webpage's javascript file -->
     <script src="./game.js" defer></script>
+    <script src="./achievements.js" defer></script>
   </head>  
   <body>
     
     <div id="navigateButtons">
       <button class="Btab1" onclick="tab('tabO1')">Options</button>
-			<button class="Btab1" onclick="tab('tabC1')">Changelog</button>
+			<button class="Btab1" onclick="tab('tabM.1')">Misc.</button>
 			<button class="Btab2" onclick="tab('tab1')">Subatomic Particles</button>
 			<button class="Btab3" onclick="tab('tab2')">Atoms</button>
       <button class="Btab4" id="unlock1" visibility="hidden" onclick="tab('tabU1')">Basic Atomic Upgrades</button>
@@ -109,28 +110,67 @@
     <div id = "tabO1">
 			Manual Save:  <button onclick = "save()">save</button><br>
 		<br><br>
-      Numbers equal to or greater 1 million will be displayed using <span id="sigFigD">4</span> significant figures.<br>
+      Numbers equal to or greater than 1e<span id="minPowerForSciD">6</span> will be displayed using <span id="sigFigD">4</span> significant figures.  
       <button onclick="changeSigFigs(-1)">-</button>
-      <button onclick="changeSigFigs(1)">+</button>
+      <button onclick="changeSigFigs(1)">+</button><br>
+      The minimum number required to display notation as scientific is 1e<span id="minPowerForSciD2">6</span>.
+      <button onclick="changeMinPowerForSci(-1)">-</button>
+      <button onclick="changeMinPowerForSci(1)">+</button>
       <br><br><br><br>
 		        Hard Reset (WARNING: WHEN CLICKING THIS BUTTON, YOU HARD RESET YOUR SAVE. YOUR PREVIOUS SAVE'S DATA WILL NOT BE RECOVERED.) : <button onclick = "hardReset()">HARD RESET</button>
 		</div>
     
     
-    <div id = "tabC1">
-      Note: This software is licensed under the <a href="https://www.apache.org/licenses/LICENSE-2.0.html">Apache License 2.0</a>.<br>
-      This means you can do anything you want with the software as long as you credit me for the original and state that you made a change to this software.
-      <br><br><br>
-      v0.1 alpha: 1-11-2020: Started making this game.<br>
-      v1.0 beta: 1-11-2020: Added Hydrogen Atoms (Protium). <br>
-      v1.0.1 beta: 1-11-2020: Added the first Basic Atomic Upgrade. <br>
-      v1.1 beta: 1-12-2020: Saving now works!<br>
-      v1.2 beta: 3-16-2020: I've been revamping the code for a while, and have gotten pre-prestige to work.<br>
-      v1.2.1 beta: 3-11-2022 (Yes that's 2022, not 2020): Continued to refactor the code and the 100 protium upgrade now works.<br>
-      v1.3: 3-14-2022: Added neutrinos! Also added formatting options and a software license, and fixed many bugs.<br>
-      v1.3.1: 3-14-2022: Fixed a bug where the CSS and JS were not recognized by the HTML.<br>
-      v1.3.2: 3-14-2022: Fixed a bug where the game kept hard resetting.<br>
-      v1.3.3: 3-14-2022: Fixed a bug where protons do nothing directly after a hard reset.<br>
+    <div id = "tabM">
+      <div id = "navigateMisc">
+        <button class = "mBtab1" onclick="tab('tabM.1')">Achievements</button>
+        <button class = "mBtab1" onclick="tab('tabM.2')">Statistics</button>
+        <button class = "mBtab1" onclick="tab('tabM.3')">Changelog</button>
+        <button class = "mBtab1" onclick="tab('tabM.4')">Credits</button>
+        <button class = "mBtab1" onclick="tab('tabM.5')">More SuperSpruce stuff</button>
+      </div><br><br>
+      
+      
+      <div id = "tabM.1">
+        Your achievements are giving you a <span id="achBonusD">1.00</span>x multiplier to energy gain from all sources.
+      </div>
+      
+      <div id = "tabM.2">
+        You have made a total of <span id="totalEnergyD">0</span> energy across all resets.
+      </div>
+      
+      <div id = "tabM.3">
+        v0.1 alpha: 1-11-2020: Started making this game.<br>
+        v1.0 beta: 1-11-2020: Added Hydrogen Atoms (Protium). <br>
+        v1.0.1 beta: 1-11-2020: Added the first Basic Atomic Upgrade. <br>
+        v1.1 beta: 1-12-2020: Saving now works!<br>
+        v1.2 beta: 3-16-2020: I've been revamping the code for a while, and have gotten pre-prestige to work.<br>
+        v1.2.1 beta: 3-11-2022 (Yes that's 2022, not 2020): Continued to refactor the code and the 100 protium upgrade now works.<br>
+        v1.3: 3-14-2022: Added neutrinos! Also added formatting options and a software license, and fixed many bugs.<br>
+        v1.3.1: 3-14-2022: Fixed a bug where the CSS and JS were not recognized by the HTML.<br>
+        v1.3.2: 3-14-2022: Fixed a bug where the game kept hard resetting.<br>
+        v1.3.3: 3-14-2022: Fixed a bug where protons do nothing directly after a hard reset.<br>
+        v1.3.4: 3-19-2022: Added a new formatting option, and added subtabs for the Misc. (previously Changelog) tab.<br>
+      </div>
+      
+      <div id = "tabM.4">
+        Note: This software is licensed under the <a href="https://www.apache.org/licenses/LICENSE-2.0.html">Apache License 2.0</a>.<br>
+        This means you can do anything you want with the software as long as you credit me for the original and state that you made a change to this software.
+        <br><br>
+        <br>Ideas: SuperSpruce
+        <br>Game: SuperSpruce
+        <br>Graphics: SuperSpruce
+        <br>Saving: ?????
+      </div>
+      
+      <div id = "tabM.5">
+        <br>SuperSpruce's <a href="superspruce.org">homepage</a>
+        <br>SuperSpruce's <a href="https://www.youtube.com/channel/UCrpbLYZYpwpkrW9j9x8Ci2A">YouTube channel</a>
+        <br><a href="https://superspruce.github.io/Clover-Clicker/">Clover Clicker</a>
+        <br><a href="https://superspruce.github.io/TheUnscaledIncremental/">The Unscaled Incremental</a>
+        <br><br><br>
+        The Antimatter Dimensions Reality Update just got leaked!!! Play it <a href="https://www.latlmes.com/world/antimatter-dimensions-reality-test-leak-1">here</a>!
+      </div>
     </div>
   </body>
 </html>
