@@ -1,5 +1,3 @@
-/* CSS files add styling rules to your content */
-
 body {
   font-family: helvetica, arial, sans-serif;
   font-size: 16px;
@@ -214,5 +212,29 @@ button.Bnun:hover {
   transform: skew(-10deg);
   color: #000000;
   background-color: #eebb44;
+  cursor: pointer;
+}
+
+
+
+.mBtab1 {
+  border: 4px solid #444444;
+  padding: 4px 12px;
+  margin: 0px -2px;
+  font-size: 16px;
+  font-weight: bold;
+  transform: skew(-10deg);
+  color: #000000;
+  background-color: #dddddd;
+}
+.mBtab1:hover {
+  border: 4px solid #007700;
+  padding: 4px 12px;
+  margin: 0px -2px;
+  font-size: 16px;
+  font-weight: bold;
+  transform: skew(-10deg);
+  color: #000000;
+  background-color: #ffffff;
   cursor: pointer;
 }
