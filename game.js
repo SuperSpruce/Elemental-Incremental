@@ -540,6 +540,7 @@ setInterval(function()
 
 
 
+
 function checkForAchievements() {
   if(game.proton >= 6 && game.electron >= 6 && !game.ach.id[0]) {
     game.ach.id[0] = true; 
@@ -663,6 +664,7 @@ function updateAchievementColors() {
        document.getElementById("ach" + i + "D").className = "achF";
   }
 }
+
 
 
 
