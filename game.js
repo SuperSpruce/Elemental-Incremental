@@ -32,8 +32,12 @@ var game = {
   tritium: 0,
   Hpower: 1,
   mass: 0,
+  /*ach: {
+    id: new [20],
+  },*/
   unlockStage: 0,
   sigFigs: 4,
+  minPowerForSci: 6,
   lastTick: Date.now()
 };
 const rand = new Uint32Array(8);
@@ -43,7 +47,7 @@ const rand = new Uint32Array(8);
 
 function format(amount, maxPrecision) {
   let power = Math.floor(Math.log10(amount));
-  if (power < 6) {
+  if (power < game.minPowerForSci) {
     if(maxPrecision == 0) {return Math.round(amount);}
     else return Math.round(amount * Math.pow(10, maxPrecision)) / Math.pow(10, maxPrecision);
   }
@@ -56,7 +60,13 @@ function format(amount, maxPrecision) {
 function changeSigFigs(amount) {
   if(((game.sigFigs + amount) < 8) && ((game.sigFigs + amount) > 0)) {
     game.sigFigs += amount;
-    document.getElementById("sigFigD").innerHTML = game.sigFigs;
+    updateEverything();
+  }
+}
+
+function changeMinPowerForSci(amount) {
+  if(((game.minPowerForSci + amount) < 16) && ((game.minPowerForSci + amount) > 0)) {
+    game.minPowerForSci += amount;
     updateEverything();
   }
 }
@@ -494,15 +504,29 @@ function load() {
   tab("tab1");
 }
 
+
+
+window.addEventListener('keydown', function(event) {
+	switch(event.keyCode) {
+    case 72: // H
+      p1();
+      break;
+  }
+});
+
+
+
 setInterval(function()
             {
   save();
+  updateEverything();
 }, 6969);
 
 
 function updateEverything() {
     updatePePower();
     document.getElementById("energyDisplay").innerHTML = format(game.energy, 0);
+    document.getElementById("totalEnergyD").innerHTML = format(game.totalEnergy, 0);
     document.getElementById("protonD").innerHTML = game.proton;
     document.getElementById("protonP").innerHTML = format(game.Hpower * game.protonPower * 1000 / game.protonSpeed, 2);
     document.getElementById("protonC").innerHTML = format(game.protonCost, 0);
@@ -517,6 +541,8 @@ function updateEverything() {
     document.getElementById("HpP").innerHTML = Math.round(100 * game.Hpower - 100);
     document.getElementById("u1p").innerHTML = game.u1;
     document.getElementById("sigFigD").innerHTML = game.sigFigs;
+    document.getElementById("minPowerForSciD").innerHTML = game.minPowerForSci;
+    document.getElementById("minPowerForSciD2").innerHTML = game.minPowerForSci;
     hideAndShow();
 }
 
@@ -559,21 +585,28 @@ function hardReset() {
   game.mass = 0;
   game.unlockStage = 0;
   game.sigFigs = 4;
+  game.minPowerForSci = 6;
   
-    updateEverything();
-    updateProtonSpeed();
+  updateEverything();
+  updateProtonSpeed();
 }
 
 
 function tab(tab) {
 	// hide all your tabs, then show the one the user selected.
-	document.getElementById("tab1").style.display = "none"
-	document.getElementById("tab2").style.display = "none"
-  document.getElementById("tabU1").style.display = "none"
-	document.getElementById("tabO1").style.display = "none"
-	document.getElementById("tabC1").style.display = "none"
-	document.getElementById(tab).style.display = "inline-block"
+	document.getElementById("tab1").style.display = "none";
+	document.getElementById("tab2").style.display = "none";
+  document.getElementById("tabU1").style.display = "none";
+	document.getElementById("tabO1").style.display = "none";
+	document.getElementById("tabM").style.display = "none";
+  document.getElementById("tabM.1").style.display = "none";
+  document.getElementById("tabM.2").style.display = "none";
+  document.getElementById("tabM.3").style.display = "none";
+  document.getElementById("tabM.4").style.display = "none";
+  document.getElementById("tabM.5").style.display = "none";
+	document.getElementById(tab).style.display = "inline-block";
+  if(tab.startsWith("tabM.")) 
+    document.getElementById("tabM").style.display = "inline-block";
 }
 // go to a tab for the first time, so not all show
-  
   load();
