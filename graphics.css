@@ -238,3 +238,53 @@ button.Bnun:hover {
   background-color: #ffffff;
   cursor: pointer;
 }
+
+
+
+
+tables.achievementTable {
+  display: grid;
+  grid-template-columns: repeat(10, 100px);
+  grid-auto-columns: 100px;
+  grid-auto-rows: 100px;
+}
+.achF {
+  background-color: #777777;
+  border: 4px solid #aaaaaa;
+  padding: 8px 8px;
+  margin: -4px -4px;
+  text-align: center;
+  position: relative;
+  display: inline-block;
+}
+.achT {
+  background-color: #227722;
+  border: 4px solid #aaaaaa;
+  padding: 8px 8px;
+  margin: -4px -4px;
+  text-align: center;
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip {
+  visibility: hidden;
+  width: 120px;
+  bottom: 100%;
+  left: 50%;
+  margin-left: -69px;
+  background-color: black;
+  color: #ffffff;
+  text-align: center;
+  padding: 4px 4px;
+  border: 4px solid #aaaaaa;
+  border-radius: 6px;
+  position: absolute;
+  z-index: 1;
+}
+.achF:hover .tooltip {
+  visibility: visible;
+}
+.achT:hover .tooltip {
+  visibility: visible;
+}
