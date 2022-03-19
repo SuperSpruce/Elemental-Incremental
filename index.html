@@ -26,7 +26,7 @@
     
       
     You have <span id = "energyDisplay">0</span> energy. <br>
-    <button class = "Bene" onclick = "tap(game.clickPower * game.Hpower)">
+    <button class = "Bene" onclick = "tap(game.clickPower * game.Hpower * game.ach.power)">
       Click for energy
     </button><br>
     You get <span id = "clickD">1</span> energy per click.
@@ -132,7 +132,31 @@
       
       
       <div id = "tabM.1">
+        You get a 5% boost to energy gain from all sources per achievement; this boost stacks multiplicatively.<br>
         Your achievements are giving you a <span id="achBonusD">1.00</span>x multiplier to energy gain from all sources.
+        <br><br>
+        <tables class="achievementTable">
+          <div class="achF" id="ach1D">Pseudo-Carbon<span class="tooltip">Have at least 6 protons and at least 6 electrons at the same time.</span></div>
+          <div class="achF" id="ach2D">Pseudo-Neon<span class="tooltip">Have at least 10 protons and at least 10 electrons at the same time.</span></div>
+          <div class="achF" id="ach3D">Pseudo-Argon<span class="tooltip">Have at least 18 protons and at least 18 electrons at the same time.</span></div>
+          <div class="achF" id="ach4D">Is this a trillion electron-volts?<span class="tooltip">Create a total of at least 21,300 energy.</span></div>
+          <div class="achF" id="ach5D">A microjoule?<span class="tooltip">Create a total of at least 133,100 energy.</span></div>
+          <div class="achF" id="ach6D">Millionaire<span class="tooltip">Create a total of at least 1 million energy.</span></div>
+          <div class="achF" id="ach7D">Pseudo-Iron<span class="tooltip">Have at least 26 protons and at least 26 electrons at the same time.</span></div>
+          <div class="achF" id="ach8D">Pseudo-Krypton<span class="tooltip">Have at least 36 protons and at least 36 electrons at the same time.</span></div>
+          <div class="achF" id="ach9D">Energy hoarder<span class="tooltip">Have a total of at least 10 million energy on hand.</span></div>
+          <div class="achF" id="ach10D">That's more than Oganesson!<span class="tooltip">Have a total of at least 294 amu worth of atoms.</span></div>
+          <div class="achF" id="ach11D">Active run<span class="tooltip">Have at least 30 electrons but no protons.</span></div>
+          <div class="achF" id="ach12D">Idle run<span class="tooltip">Have at least 30 protons but no electrons.</span></div>
+          <div class="achF" id="ach13D">Now we're talking<span class="tooltip">Create at least 20,000 energy in the span of one second.</span></div>
+          <div class="achF" id="ach14D">Bonus!<span class="tooltip">Hate a total of at least 10 achievements.</span></div>
+          <div class="achF" id="ach15D">Fast Hydrogen<span class="tooltip">Have a reset for at least 1 Hydrogen atom that lasts under 4 seconds.</span></div>
+          <div class="achF" id="ach16D">Neutrino rookie<span class="tooltip">Have at least 10 neutrinos.</span></div>
+          <div class="achF" id="ach17D">That's a lot of particles<span class="tooltip">Have the sum of your protons, electrons, and neutrinos be at least 100.</span></div>
+          <div class="achF" id="ach18D">Pseudo-Silver<span class="tooltip">Have at least 47 protons and at least 47 electrons at the same time.</span></div>
+          <div class="achF" id="ach19D">Pseudo-Xenon<span class="tooltip">Have at least 54 protons and at least 54 electrons at the same time.</span></div>
+          <div class="achF" id="ach20D">Classic run<span class="tooltip">Have a total of at least 50 million energy on hand without any neutrinos.</span></div>
+        </tables>
       </div>
       
       <div id = "tabM.2">
@@ -150,7 +174,9 @@
         v1.3.1: 3-14-2022: Fixed a bug where the CSS and JS were not recognized by the HTML.<br>
         v1.3.2: 3-14-2022: Fixed a bug where the game kept hard resetting.<br>
         v1.3.3: 3-14-2022: Fixed a bug where protons do nothing directly after a hard reset.<br>
-        v1.3.4: 3-19-2022: Added a new formatting option, and added subtabs for the Misc. (previously Changelog) tab.<br>
+        v1.3.4: 3-19-2022: Added a new formatting option, added subtabs for the Misc. (previously Changelog) tab, and added a hotkey "H" for Hydrogen atom resets!<br>
+        v1.3.5: 3-19-2022: Fixed a bug where the minimum power for scientific notation was undefined.<br>
+        v1.4: 3-19-2022: Added achievements! There are 20 of them in this initial batch.<br>
       </div>
       
       <div id = "tabM.4">
