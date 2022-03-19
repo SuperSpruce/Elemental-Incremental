@@ -499,6 +499,7 @@ function load() {
   if(!(game.totalEnergy > 0)) hardReset();
 
     //transformToDecimal(game);
+  initializeVariables();
   updateEverything();
   updateProtonSpeed();
   tab("tab1");
