@@ -523,6 +523,45 @@ setInterval(function()
 }, 6969);
 
 
+function initializeVariables() {
+  if(!game.energy) game.energy = 0;
+  if(!game.totalEnergy) game.totalEnergy = 0;
+  if(!game.proton) game.proton = 0;
+  if(!game.protonPower) game.protonPower = 0;
+  if(!game.protonInitCost) game.protonInitCost = 20;
+  if(!game.protonCostMult) game.protonCostMult = 4/3;
+  if(!game.protonCost) game.protonCost = 20;
+  if(!game.protonCost10) game.protonCost10 = 20 * (1 - Math.pow(4/3, 10)) / (1 - 4/3);
+  if(!game.protonCost100) game.protonCost100 = 20 * (1 - Math.pow(4/3, 100)) / (1 - 4/3);
+  if(!game.electron) game.electron = 0;
+  if(!game.electronPower) game.electronPower = 0;
+  if(!game.electronInitCost) game.electronInitCost = 50;
+  if(!game.electronCostMult) game.electronCostMult = 1.33;
+  if(!game.electronCost) game.electronCost = 50;
+  if(!game.electronCost10) game.electronCost10 = 50 * (1 - Math.pow(1.33, 10)) / (1 - 1.33);
+  if(!game.electronCost100) game.electronCost100 = 50 * (1 - Math.pow(1.33, 100)) / (1 - 1.33);
+  if(!game.neutrino) game.neutrino = 0;
+  if(!game.neutrinoPower) game.neutrinoPower = 0;
+  if(!game.neutrinoInitCost) game.neutrinoInitCost = 100000;
+  if(!game.neutrinoCostMult) game.neutrinoCostMult = 2;
+  if(!game.neutrinoCost) game.neutrinoCost = 100000;
+  if(!game.neutrinoCost10) game.neutrinoCost10 = 100000 * (1 - Math.pow(2, 10)) / (1 - 2);
+  if(!game.neutrinoCost100) game.neutrinoCost100 = 100000 * (1 - Math.pow(2, 100)) / (1 - 2);
+  if(!game.H) game.H = 0;
+  if(!game.deu) game.deu = 0;
+  if(!game.tritium) game.tritium = 0;
+  if(!game.Hpower) game.Hpower = 1;
+  if(!game.clickPower) game.clickPower = 1;
+  if(!game.clickStat) game.clickStat = 0;
+  if(!game.protonSpeed) game.protonSpeed = 1000;
+  if(!game.u1) game.u1 = false;
+  if(!game.mass) game.mass = 0;
+  if(!game.unlockStage) game.unlockStage = 0;
+  if(!game.sigFigs) game.sigFigs = 4;
+  if(!game.minPowerForSci) game.minPowerForSci = 6;
+}
+
+
 function updateEverything() {
     updatePePower();
     document.getElementById("energyDisplay").innerHTML = format(game.energy, 0);
