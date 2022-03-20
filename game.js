@@ -509,9 +509,11 @@ function load() {
     initializeVariables();
       if(localStorage.cc) {
         game = JSON.parse(atob(localStorage.cc));
+        initializeVariables();
       }
     else hardReset();
-    if(!(game.totalEnergy > 0)) hardReset();
+    if(!(game.totalEnergy > 0)) 
+      hardReset();
   
       //transformToDecimal(game);
     updateEverything();
@@ -712,6 +714,8 @@ function initializeVariables() {
     }
   }
   if(!game.ach.num) game.ach.num = 20;
+  if(!game.ach.get) game.ach.get = 0;
+  if(!game.ach.power) game.ach.power = 1;
   if(!game.ach.id || !game.ach.id[0]) {
     game.ach.id = new Array(game.ach.num);
     for(let i = 0; i < game.ach.num; i++)
