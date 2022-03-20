@@ -507,18 +507,18 @@ function save() {
 }
 
 function load() {
-    if(localStorage.cc) {
-      game = JSON.parse(atob(localStorage.cc));
-    }
-  else hardReset();
-  if(!(game.totalEnergy > 0)) hardReset();
-
-    //transformToDecimal(game);
-  initializeVariables();
-  updateEverything();
-  updateProtonSpeed();
-  tab("tab1");
-}
+    initializeVariables();
+      if(localStorage.cc) {
+        game = JSON.parse(atob(localStorage.cc));
+      }
+    else hardReset();
+    if(!(game.totalEnergy > 0)) hardReset();
+  
+      //transformToDecimal(game);
+    updateEverything();
+    updateProtonSpeed();
+    tab("tab1");
+  }
 
 
 
