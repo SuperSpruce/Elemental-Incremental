@@ -459,7 +459,6 @@ setInterval(function()
 
 setInterval(function()
            {
-  if(!(game.totalEnergy > 0)) {hardReset();}
   checkForAchievements();
   hideAndShow();
 }, 1000)
