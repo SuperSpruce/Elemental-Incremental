@@ -557,6 +557,7 @@ var game = {
       document.getElementById("energyDisplay").innerHTML = format(game.energy, 0);
       hideAndShow();
     }
+
   }
   
   function w3b() {
@@ -571,7 +572,9 @@ var game = {
       hideAndShow();
     }
   }
+
   
+
   
   
   function p1() //not the McLaren P1, this is a :ripaarex:
@@ -627,6 +630,7 @@ var game = {
   
   
   
+
   
   setInterval(function() {
     neutronDecay();
@@ -1045,17 +1049,17 @@ var game = {
   
   function tab(tab) {
       // hide all your tabs, then show the one the user selected.
-      document.getElementById("tab1").style.display = "none";
-      document.getElementById("tab2").style.display = "none";
+    document.getElementById("tab1").style.display = "none";
+    document.getElementById("tab2").style.display = "none";
     document.getElementById("tabU1").style.display = "none";
-      document.getElementById("tabO1").style.display = "none";
-      document.getElementById("tabM").style.display = "none";
+    document.getElementById("tabO1").style.display = "none";
+    document.getElementById("tabM").style.display = "none";
     document.getElementById("tabM.1").style.display = "none";
     document.getElementById("tabM.2").style.display = "none";
     document.getElementById("tabM.3").style.display = "none";
     document.getElementById("tabM.4").style.display = "none";
     document.getElementById("tabM.5").style.display = "none";
-      document.getElementById(tab).style.display = "inline-block";
+    document.getElementById(tab).style.display = "inline-block";
     if(tab.startsWith("tabM.")) 
       document.getElementById("tabM").style.display = "inline-block";
   }
