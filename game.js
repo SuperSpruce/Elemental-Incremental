@@ -481,7 +481,7 @@ var game = {
     }
   }
   
-  function makeMaxNeutrons() {
+    function makeMaxNeutrons() {
     if(game.energy / (1e9 * (game.neutronCostMult - 1)) > game.neutronCost)
       logBuy(-2, game.neutronCost, game.neutronCostMult);
 
@@ -494,6 +494,9 @@ var game = {
           game.neutronCost10 *= a;
           game.neutronCost100 *= a;
           count += 100;
+          game.proton -= 100;
+          game.electron -= 100;
+          game.neutrino -= 100;
         }
         else if(game.energy > game.neutronCost10 && game.proton >= 10 && game.electron >= 10 && game.neutrino >= 10) {
           game.energy -= game.neutronCost10;
@@ -501,17 +504,20 @@ var game = {
           game.neutronCost *= b;
           game.neutronCost10 *= b;
           count += 10;
+          game.proton -= 10;
+          game.electron -= 10;
+          game.neutrino -= 10;
         }
         else {
           game.energy -= game.neutronCost;
           game.neutronCost *= game.neutronCostMult;
           count++;
+          game.proton--;
+          game.electron--;
+          game.neutrino--;
         }
       }
     game.neutron += count;
-    game.proton -= count;
-    game.electron -= count;
-    game.neutrino -= count;
     game.neutrinoPower = game.neutrino;
     game.neutronPower = game.neutron;
     updatePePower();
@@ -529,6 +535,7 @@ var game = {
     document.getElementById("neutrinoP").innerHTML = Math.round(1 + game.neutrinoPower);
     document.getElementById("clickD").innerHTML = format(game.Hpower * game.clickPower * game.ach.power, 2);
   }
+
   
   
   
