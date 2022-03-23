@@ -11,7 +11,7 @@
     
     <!-- import the webpage's javascript file -->
     <script src="./game.js" defer></script>
-    <script src="./achievements.js" defer></script>
+    <!--<script src="./achievements.js" defer></script> -->
   </head>  
   <body>
     
@@ -63,20 +63,35 @@
          </button><co class ="Cnuv">Cost: 10000 energy</co>
          </subdiv><br>
       <subdiv id ="tab1b"><co class ="Cnuv">
-      Spend <span id = "neutrinoC">100000</span> energy to make a neutrino.<br>
-    <button class = "Bnuv" onclick = "makeNeutrino()">
-      Make a neutrino!
-    </button>
-    <button class = "Bnuv" onclick = "makeMaxNeutrinos()">
-      Make as many neutrinos as you can make with your energy!
-    </button><br>
-    You have <span id = "neutrinoD">0</span> neutrinos.<br>
-        They are boosting the production of energy from all sources by <span id = "neutrinoP">1</span>x.
+        Spend <span id = "neutrinoC">100000</span> energy to make a neutrino.<br>
+        <button class = "Bnuv" onclick = "makeNeutrino()">
+          Make a neutrino!
+        </button>
+        <button class = "Bnuv" onclick = "makeMaxNeutrinos()">
+          Make as many neutrinos as you can make with your energy!
+        </button><br>
+          You have <span id = "neutrinoD">0</span> neutrinos.<br>
+          They are boosting the production of energy from all sources by <span id = "neutrinoP">1</span>x.
       </co></subdiv><br><br>
        
-       <subdiv id="tab1c">
-         <button class = "Bnun" onclick="w3b()">Coming soon!</button>
-       </subdiv>
+      <subdiv id="tab1c">
+        <button class = "Bnun" onclick="w3b()">Unlock neutrons</button>
+        <co class="Cnun">Cost: 20 Protium.</co>
+      </subdiv><br>
+
+      <subdiv id="tab1d"><co class="Cnun">
+        Spend <span id = "neutronC">1,000,000</span> energy, 1 proton, 1 electron, and 1 neutrino to make a neutron.<br>
+        <button class = "Bnun" onclick = "makeNeutron()">
+          Make a neutron!
+        </button>
+        <button class = "Bnun" onclick = "makeMaxNeutrons()">
+          Make as many neutrons as you can make!
+        </button><br>
+          You have <span id = "neutronD">0</span> neutrons.<br>
+          They are boosting the production of energy from all sources by <span id = "neutronP">1</span>x.<br>
+          They decay into <span id="neutronDecayEnD">5,000,000</span> energy with a half-life of <span id="neutronHLD">If you are seeing this, then the game is bugged</span>.<br>
+          Upon decay, there is a <span id="neutronDecayPD">lol</span>% chance to make a proton, a <span id="neutronDecayElD">XD</span>% chance to make an electron, and a <span id="neutronDecayND">???</span>% chance to make a neutrino.
+      </co></subdiv>
     
     </div>
     
@@ -108,8 +123,9 @@
     
     
     <div id = "tabO1">
-			Manual Save:  <button onclick = "save()">save</button><br>
-		<br><br>
+			<button onclick = "save()">Manual save</button>
+      <button onclick = "exportSave()">Export save</button>
+		<br><br><br>
       Numbers equal to or greater than 1e<span id="minPowerForSciD">6</span> will be displayed using <span id="sigFigD">4</span> significant figures.  
       <button onclick="changeSigFigs(-1)">-</button>
       <button onclick="changeSigFigs(1)">+</button><br>
@@ -149,13 +165,18 @@
           <div class="achF" id="ach11D">Active run<span class="tooltip">Have at least 30 electrons but no protons.</span></div>
           <div class="achF" id="ach12D">Idle run<span class="tooltip">Have at least 30 protons but no electrons.</span></div>
           <div class="achF" id="ach13D">Now we're talking<span class="tooltip">Create at least 20,000 energy in the span of one second.</span></div>
-          <div class="achF" id="ach14D">Bonus!<span class="tooltip">Hate a total of at least 10 achievements.</span></div>
+          <div class="achF" id="ach14D">Bonus!<span class="tooltip">Have a total of at least 10 achievements.</span></div>
           <div class="achF" id="ach15D">Fast Hydrogen<span class="tooltip">Have a reset for at least 1 Hydrogen atom that lasts under 4 seconds.</span></div>
           <div class="achF" id="ach16D">Neutrino rookie<span class="tooltip">Have at least 10 neutrinos.</span></div>
-          <div class="achF" id="ach17D">That's a lot of particles<span class="tooltip">Have the sum of your protons, electrons, and neutrinos be at least 100.</span></div>
+          <div class="achF" id="ach17D">That's a lot of particles<span class="tooltip">Have the sum of your protons, neutrons, electrons, and neutrinos be at least 100.</span></div>
           <div class="achF" id="ach18D">Pseudo-Silver<span class="tooltip">Have at least 47 protons and at least 47 electrons at the same time.</span></div>
           <div class="achF" id="ach19D">Pseudo-Xenon<span class="tooltip">Have at least 54 protons and at least 54 electrons at the same time.</span></div>
           <div class="achF" id="ach20D">Classic run<span class="tooltip">Have a total of at least 50 million energy on hand without any neutrinos.</span></div>
+          <div class="achF" id="ach21D">What just happened?!<span class="tooltip">Have a neutron decay.</span></div>
+          <div class="achF" id="ach22D">Kinetic energy of a toy car<span class="tooltip">Create a total of at least 200 million energy.</span></div>
+          <div class="achF" id="ach23D">A question mark move<span class="tooltip">Have at least 4 neutrons but no neutrinos.</span></div>
+          <div class="achF" id="ach24D">Enough for Carbon-12<span class="tooltip">Have at least 6 neutrons.</span></div>
+          <div class="achF" id="ach25D">What do we call this?<span class="tooltip">Have at least 5 neutrons but no protons and no electrons.</span></div>
         </tables>
       </div>
       
@@ -177,6 +198,8 @@
         v1.3.4: 3-19-2022: Added a new formatting option, added subtabs for the Misc. (previously Changelog) tab, and added a hotkey "H" for Hydrogen atom resets!<br>
         v1.3.5: 3-19-2022: Fixed a bug where the minimum power for scientific notation was undefined.<br>
         v1.4: 3-19-2022: Added achievements! There are 20 of them in this initial batch.<br>
+        v1.4.6: 3-20-2022: Fixed a typo and a game-breaking bug.<br>
+        v1.5: 3-22-2022: Added neutrons! Also added 5 new achievements and a button to export your save.<br>
       </div>
       
       <div id = "tabM.4">
