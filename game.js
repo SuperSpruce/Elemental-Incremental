@@ -43,14 +43,14 @@ var game = {
     deu: 0,
     tritium: 0,
     Hpower: 1,
-    mass: 0,
+    totalMass: 0,
     ach: {
-      num: 25,
+      num: 30,
       get: 0,
       power: 1,
-      id: new Array(25),
-      name: new Array(25),
-      desc: new Array(25)
+      id: new Array(30),
+      name: new Array(30),
+      desc: new Array(30)
     },
     unlockStage: 0,
     sigFigs: 4,
@@ -254,6 +254,7 @@ var game = {
     {
       game.energy -= Math.ceil(game.protonCost);
       game.proton++;
+      game.totalMass += 1.0072765;
       updateProtonPower();
       game.protonCost *= game.protonCostMult;
       game.protonCost10 *= game.protonCostMult;
@@ -294,7 +295,13 @@ var game = {
         count++;
       }
     }
+    if(count >= 40 && !game.ach.id[26]) {
+      game.ach.id[26] = true; 
+      updateAchievementColors();
+      checkAchievementCount()
+    }
     game.proton += count;
+    game.totalMass += count * 1.0072765;
     updateProtonPower();
     game.protonCost10 = game.protonCost * (1 - Math.pow(game.protonCostMult, 10)) / (1 - game.protonCostMult);
     game.protonCost100 = game.protonCost * (1 - Math.pow(game.protonCostMult, 100)) / (1 - game.protonCostMult);
@@ -325,6 +332,13 @@ var game = {
     updateProtonPower();
     updateElectronPower();
   }
+
+
+  function updateMass() {
+    game.totalMass = game.proton * 1.0072765 + game.electron * 0.0005858 + game.neutron * 1.0086649 + game.H * 1.0078250 + game.deu * 2.0141018;
+  }
+
+
   
   
   function makeElectron()
@@ -333,6 +347,7 @@ var game = {
     {
       game.energy -= Math.ceil(game.electronCost);
       game.electron++;
+      game.totalMass += 0.0005858;
       updateElectronPower();
       game.electronCost *= game.electronCostMult;
       game.electronCost10 *= game.electronCostMult;
@@ -374,7 +389,13 @@ var game = {
         count++;
       }
     }
+    if(count >= 40 && !game.ach.id[26]) {
+      game.ach.id[26] = true; 
+      updateAchievementColors();
+      checkAchievementCount()
+    }
     game.electron += count;
+    game.totalMass += count * 0.0005858;
     updateElectronPower();
     game.electronCost10 = game.electronCost * (1 - Math.pow(game.electronCostMult, 10)) / (1 - game.electronCostMult);
     game.electronCost100 = game.electronCost * (1 - Math.pow(game.electronCostMult, 100)) / (1 - game.electronCostMult);
@@ -437,6 +458,11 @@ var game = {
         count++;
       }
     }
+    if(count >= 40 && !game.ach.id[26]) {
+      game.ach.id[26] = true; 
+      updateAchievementColors();
+      checkAchievementCount()
+    }
     game.neutrino += count;
     game.neutrinoPower = game.neutrino;
     updatePePower();
@@ -466,6 +492,7 @@ var game = {
       game.neutronCost10 *= game.neutronCostMult;
       game.neutronCost100 *= game.neutronCostMult;
       game.neutrinoPower = game.neutrino;
+      game.totalMass += 1.0086649;
       updatePePower();
       document.getElementById("energyDisplay").innerHTML = format(game.energy, 0);
       document.getElementById("protonD").innerHTML = game.proton;
@@ -494,6 +521,10 @@ var game = {
           game.neutronCost10 *= a;
           game.neutronCost100 *= a;
           count += 100;
+          game.proton -= 100;
+          game.electron -= 100;
+          game.neutrino -= 100;
+          game.totalMass += 100.86649;
         }
         else if(game.energy > game.neutronCost10 && game.proton >= 10 && game.electron >= 10 && game.neutrino >= 10) {
           game.energy -= game.neutronCost10;
@@ -501,17 +532,27 @@ var game = {
           game.neutronCost *= b;
           game.neutronCost10 *= b;
           count += 10;
+          game.proton -= 10;
+          game.electron -= 10;
+          game.neutrino -= 10;
+          game.totalMass += 10.086649;
         }
         else {
           game.energy -= game.neutronCost;
           game.neutronCost *= game.neutronCostMult;
           count++;
+          game.proton--;
+          game.electron--;
+          game.neutrino--;
+          game.totalMass += 1.0086649;
         }
       }
+    if(count >= 40 && !game.ach.id[26]) {
+      game.ach.id[26] = true; 
+      updateAchievementColors();
+      checkAchievementCount()
+    }
     game.neutron += count;
-    game.proton -= count;
-    game.electron -= count;
-    game.neutrino -= count;
     game.neutrinoPower = game.neutrino;
     game.neutronPower = game.neutron;
     updatePePower();
@@ -541,7 +582,9 @@ var game = {
         game.H -= 100;
         game.protonSpeed /= 2;
         game.Hpower = Math.sqrt(game.H + 1) * Math.sqrt(game.deu + 1);
-        document.getElementById("HpD").innerHTML = game.H;
+        document.getElementById("H1D").innerHTML = game.H;
+        document.getElementById("H1P").innerHTML = format(Math.sqrt(game.H + 1), 2);
+        document.getElementById("HpP").innerHTML = format(game.Hpower, 2);
         document.getElementById("u1p").innerHTML = game.u1;
         document.getElementById("clickD").innerHTML = format(game.Hpower * game.clickPower * game.ach.power, 2);
         document.getElementById("protonP").innerHTML = format(game.Hpower * game.protonPower * game.ach.power * 1000 / game.protonSpeed, 2);   
@@ -557,7 +600,6 @@ var game = {
       document.getElementById("energyDisplay").innerHTML = format(game.energy, 0);
       hideAndShow();
     }
-
   }
   
   function w3b() {
@@ -565,28 +607,38 @@ var game = {
       game.unlockStage++;
       game.H -= 20;
       game.Hpower = Math.sqrt(game.H + 1) * Math.sqrt(game.deu + 1);
-      document.getElementById("HpD").innerHTML = game.H;
+      document.getElementById("H1D").innerHTML = game.H;
+      document.getElementById("H1P").innerHTML = format(Math.sqrt(game.H + 1), 2);
+      document.getElementById("HpP").innerHTML = format(game.Hpower, 2);
       document.getElementById("clickD").innerHTML = format(game.Hpower * game.clickPower * game.ach.power, 2);
       document.getElementById("protonP").innerHTML = format(game.Hpower * game.protonPower * game.ach.power * 1000 / game.protonSpeed, 2);
       document.getElementById("electronP").innerHTML = format(game.Hpower * game.electronPower * game.ach.power, 2);
       hideAndShow();
     }
   }
-
-  
-
   
   
-  function p1() //not the McLaren P1, this is a :ripaarex:
+  
+  function p1(mass) //not the McLaren P1, this is a :ripaarex:
   {
     if(Date.now() - lastResetTime <= 4000 && Math.min(game.proton, game.electron) >= 1 && !game.ach.id[14]) {
       game.ach.id[14] = true; 
       updateAchievementColors();
       checkAchievementCount();
     }
-    
     lastResetTime = Date.now();
-    game.H += Math.min(game.proton, game.electron);
+
+    if(mass == 1) {
+      game.H += Math.min(game.proton, game.electron);
+      document.getElementById("H1D").innerHTML = game.H;
+      document.getElementById("H1P").innerHTML = format(Math.sqrt(game.H + 1), 2);
+      }
+    else if(mass == 2) {
+      game.deu += Math.min(game.proton, game.neutron, game.electron);
+      document.getElementById("H2D").innerHTML = game.deu;
+      document.getElementById("H2P").innerHTML = format(Math.sqrt(game.deu + 1), 2);
+    }
+
     game.Hpower = Math.sqrt(game.H + 1) * Math.sqrt(game.deu + 1);
     game.energy = 0;
     game.clickPower = 1;
@@ -610,6 +662,7 @@ var game = {
     game.neutronCost = 1e6;
     game.neutronCost10 = 1e6 * (1 - Math.pow(1.5, 10)) / (1 - 1.5);
     game.neutronCost100 = 1e6 * (1 - Math.pow(1.5, 100)) / (1 - 1.5);
+    updateMass();
     document.getElementById("energyDisplay").innerHTML = format(game.energy, 0);
     document.getElementById("protonD").innerHTML = game.proton;
     document.getElementById("protonP").innerHTML = format(game.Hpower * game.protonPower * game.ach.power * 1000 / game.protonSpeed, 2);
@@ -623,14 +676,12 @@ var game = {
     document.getElementById("neutrinoC").innerHTML = format(game.neutrinoCost, 0);
     document.getElementById("neutrinoD").innerHTML = game.neutrino;
     document.getElementById("clickD").innerHTML = format(game.Hpower * game.clickPower * game.ach.power, 2);
-    document.getElementById("HpD").innerHTML = game.H;
-    document.getElementById("HpP").innerHTML = Math.round(100 * game.Hpower - 100);
+    document.getElementById("HpP").innerHTML = format(game.Hpower, 2);
   }
   
   
   
   
-
   
   setInterval(function() {
     neutronDecay();
@@ -655,6 +706,7 @@ var game = {
         document.getElementById('tab1b').style.visibility = "hidden";
         document.getElementById('tab1c').style.visibility = "hidden";
         document.getElementById('tab1d').style.visibility = "hidden";
+        document.getElementById('H2square').style.visibility = "hidden";
         if(game.H > 1)
           game.unlockStage++;
       break;
@@ -665,6 +717,7 @@ var game = {
         document.getElementById('tab1b').style.visibility = "hidden";
         document.getElementById('tab1c').style.visibility = "hidden";
         document.getElementById('tab1d').style.visibility = "hidden";
+        document.getElementById('H2square').style.visibility = "hidden";
         break;
         
       case 2:
@@ -673,6 +726,7 @@ var game = {
         document.getElementById('tab1b').style.visibility = "visible";
         document.getElementById('tab1c').style.visibility = "visible";
         document.getElementById('tab1d').style.visibility = "hidden";
+        document.getElementById('H2square').style.visibility = "hidden";
         break;
         
       case 3:
@@ -681,6 +735,7 @@ var game = {
         document.getElementById('tab1b').style.visibility = "visible";
         document.getElementById('tab1c').style.visibility = "hidden";
         document.getElementById('tab1d').style.visibility = "visible";
+        document.getElementById('H2square').style.visibility = "visible";
         break;
     }
   }
@@ -722,7 +777,10 @@ var game = {
   window.addEventListener('keydown', function(event) {
       switch(event.keyCode) {
       case 72: // H
-        p1();
+        p1(1);
+        break;
+      case 68: // D
+        p1(2);
         break;
     }
   });
@@ -809,8 +867,18 @@ var game = {
       updateAchievementColors();
       checkAchievementCount()
     }
+    if(game.energy >= 5e8 && game.neutrino == 0 && game.neutron == 0 && !game.ach.id[29]) {
+      game.ach.id[29] = true; 
+      updateAchievementColors();
+      checkAchievementCount()
+    }
     if(game.totalEnergy >= 2e8 && !game.ach.id[21]) {
       game.ach.id[21] = true;
+      updateAchievementColors();
+      checkAchievementCount();
+    }
+    if(game.totalEnergy >= 1e9 && !game.ach.id[25]) {
+      game.ach.id[25] = true;
       updateAchievementColors();
       checkAchievementCount();
     }
@@ -845,8 +913,18 @@ var game = {
       updateAchievementColors();
       checkAchievementCount();
     }
+    if(game.totalMass >= 1200 && !game.ach.id[28]) {
+      game.ach.id[28] = true;
+      updateAchievementColors();
+      checkAchievementCount();
+    }
     if(game.ach.get >= 10 && !game.ach.id[13]) {
       game.ach.id[13] = true; 
+      updateAchievementColors();
+      checkAchievementCount();
+    }
+    if(game.ach.get >= 25 && !game.ach.id[27]) {
+      game.ach.id[27] = true; 
       updateAchievementColors();
       checkAchievementCount();
     }
@@ -882,6 +960,47 @@ var game = {
   }
   
   
+
+
+  function updateEverything() {
+    checkAchievementCount();
+    updateMass();
+    updatePePower();
+    document.getElementById("energyDisplay").innerHTML = format(game.energy, 0);
+    document.getElementById("totalEnergyD").innerHTML = format(game.totalEnergy, 0);
+    document.getElementById("protonD").innerHTML = game.proton;
+    document.getElementById("protonP").innerHTML = format(game.Hpower * game.protonPower * game.ach.power * 1000 / game.protonSpeed, 2);
+    document.getElementById("protonC").innerHTML = format(game.protonCost, 0);
+    document.getElementById("neutronD").innerHTML = game.neutron;
+    document.getElementById("neutronP").innerHTML = format(Math.pow(1 + game.neutronPower/2, 2), 2);
+    document.getElementById("neutronC").innerHTML = format(game.neutronCost, 0);
+    document.getElementById("neutronDecayEnD").innerHTML = format(game.neutronDecayEnergy, 0);
+    document.getElementById("neutronHLD").innerHTML = formatTime(game.neutronHL);
+    document.getElementById("neutronDecayPD").innerHTML = format(game.neutronDecayPChance * 100, 2);
+    document.getElementById("neutronDecayElD").innerHTML = format(game.neutronDecayEChance * 100, 2);
+    document.getElementById("neutronDecayND").innerHTML = format(game.neutronDecayNChance * 100, 2);
+    document.getElementById("electronD").innerHTML = game.electron;
+    document.getElementById("electronP").innerHTML = format(game.Hpower * game.electronPower * game.ach.power, 2);
+    document.getElementById("electronC").innerHTML = format(game.electronCost, 0);
+    document.getElementById("neutrinoC").innerHTML = format(game.neutrinoCost, 0);
+    document.getElementById("neutrinoD").innerHTML = game.neutrino;
+    document.getElementById("neutrinoP").innerHTML = Math.round(1 + game.neutrino);
+    document.getElementById("clickD").innerHTML = format(game.Hpower * game.clickPower * game.ach.power, 2);
+    document.getElementById("H1D").innerHTML = game.H;
+    document.getElementById("H1P").innerHTML = format(Math.sqrt(game.H + 1), 2);
+    document.getElementById("H2D").innerHTML = game.deu;
+    document.getElementById("H2P").innerHTML = format(Math.sqrt(game.deu + 1), 2);
+    document.getElementById("HpP").innerHTML = format(game.Hpower, 2);
+    document.getElementById("u1p").innerHTML = game.u1;
+    document.getElementById("sigFigD").innerHTML = game.sigFigs;
+    document.getElementById("minPowerForSciD").innerHTML = game.minPowerForSci;
+    document.getElementById("minPowerForSciD2").innerHTML = game.minPowerForSci;
+    hideAndShow();
+    updateAchievementColors();
+}
+
+
+
   
   function initializeVariables() {
     if(!game.energy) game.energy = 0;
@@ -927,19 +1046,19 @@ var game = {
     if(!game.clickStat) game.clickStat = 0;
     if(!game.protonSpeed) game.protonSpeed = 1000;
     if(!game.u1) game.u1 = false;
-    if(!game.mass) game.mass = 0;
+    if(!game.totalMass) game.totalMass = 0;
     if(!game.unlockStage) game.unlockStage = 0;
     if(!game.sigFigs) game.sigFigs = 4;
     if(!game.minPowerForSci) game.minPowerForSci = 6;
     if(!game.ach) {
       game.ach = {
-        num: 25,
+        num: 30,
         get: 0,
         power: 1,
-        id: new Array(25)
+        id: new Array(30)
       }
     }
-    if(!game.ach.num || game.ach.num != 25) game.ach.num = 25;
+    if(!game.ach.num || game.ach.num != 30) game.ach.num = 30;
     if(!game.ach.id || game.ach.id[0] == "null") {
       game.ach.id = new Array(game.ach.num);
       for(let i = 0; i < game.ach.num; i++)
@@ -951,40 +1070,6 @@ var game = {
       for(let i = 0; i < Math.min(a.length, game.ach.num); i++) 
         game.ach.id[i] = a[i];
     }
-  }
-  
-  
-  function updateEverything() {
-      checkAchievementCount();
-      updatePePower();
-      document.getElementById("energyDisplay").innerHTML = format(game.energy, 0);
-      document.getElementById("totalEnergyD").innerHTML = format(game.totalEnergy, 0);
-      document.getElementById("protonD").innerHTML = game.proton;
-      document.getElementById("protonP").innerHTML = format(game.Hpower * game.protonPower * game.ach.power * 1000 / game.protonSpeed, 2);
-      document.getElementById("protonC").innerHTML = format(game.protonCost, 0);
-      document.getElementById("neutronD").innerHTML = game.neutron;
-      document.getElementById("neutronP").innerHTML = format(Math.pow(1 + game.neutronPower/2, 2), 2);
-      document.getElementById("neutronC").innerHTML = format(game.neutronCost, 0);
-      document.getElementById("neutronDecayEnD").innerHTML = format(game.neutronDecayEnergy, 0);
-      document.getElementById("neutronHLD").innerHTML = formatTime(game.neutronHL);
-      document.getElementById("neutronDecayPD").innerHTML = format(game.neutronDecayPChance * 100, 2);
-      document.getElementById("neutronDecayElD").innerHTML = format(game.neutronDecayEChance * 100, 2);
-      document.getElementById("neutronDecayND").innerHTML = format(game.neutronDecayNChance * 100, 2);
-      document.getElementById("electronD").innerHTML = game.electron;
-      document.getElementById("electronP").innerHTML = format(game.Hpower * game.electronPower * game.ach.power, 2);
-      document.getElementById("electronC").innerHTML = format(game.electronCost, 0);
-      document.getElementById("neutrinoC").innerHTML = format(game.neutrinoCost, 0);
-      document.getElementById("neutrinoD").innerHTML = game.neutrino;
-      document.getElementById("neutrinoP").innerHTML = Math.round(1 + game.neutrino);
-      document.getElementById("clickD").innerHTML = format(game.Hpower * game.clickPower * game.ach.power, 2);
-      document.getElementById("HpD").innerHTML = game.H;
-      document.getElementById("HpP").innerHTML = Math.round(100 * game.Hpower - 100);
-      document.getElementById("u1p").innerHTML = game.u1;
-      document.getElementById("sigFigD").innerHTML = game.sigFigs;
-      document.getElementById("minPowerForSciD").innerHTML = game.minPowerForSci;
-      document.getElementById("minPowerForSciD2").innerHTML = game.minPowerForSci;
-      hideAndShow();
-      updateAchievementColors();
   }
   
   
@@ -1035,7 +1120,10 @@ var game = {
     game.clickStat = 0;
     game.protonSpeed = 1000;
     game.u1 = false;
-    game.mass = 0;
+    game.totalMass = 0;
+    game.ach.num = 30;
+    for(let i = 0; i < game.ach.num; i++)
+      game.ach.id[i] = false;
     game.ach.get = 0;
     game.ach.power = 1;
     game.unlockStage = 0;
@@ -1049,17 +1137,17 @@ var game = {
   
   function tab(tab) {
       // hide all your tabs, then show the one the user selected.
-    document.getElementById("tab1").style.display = "none";
-    document.getElementById("tab2").style.display = "none";
+      document.getElementById("tab1").style.display = "none";
+      document.getElementById("tab2").style.display = "none";
     document.getElementById("tabU1").style.display = "none";
-    document.getElementById("tabO1").style.display = "none";
-    document.getElementById("tabM").style.display = "none";
+      document.getElementById("tabO1").style.display = "none";
+      document.getElementById("tabM").style.display = "none";
     document.getElementById("tabM.1").style.display = "none";
     document.getElementById("tabM.2").style.display = "none";
     document.getElementById("tabM.3").style.display = "none";
     document.getElementById("tabM.4").style.display = "none";
     document.getElementById("tabM.5").style.display = "none";
-    document.getElementById(tab).style.display = "inline-block";
+      document.getElementById(tab).style.display = "inline-block";
     if(tab.startsWith("tabM.")) 
       document.getElementById("tabM").style.display = "inline-block";
   }
