@@ -11,7 +11,7 @@
     
     <!-- import the webpage's javascript file -->
     <script src="./game.js" defer></script>
-    <!-- <script src="./achievements.js" defer></script> -->
+    <!--<script src="./achievements.js" defer></script> -->
   </head>  
   <body>
     
@@ -98,14 +98,29 @@
     
     <div id = "tab2">
       
-    Reset your progress in exchange for some Hydrogen Atoms (Protium).<br>
-      You will get as many Hydrogen Atoms (Protium) as the minimum of your protons and electrons.<br>
-    <button onclick = "p1()">
-      Make some Hydrogen Atoms in exchange for your progress!
-    </button> <br>
-    You have <span id = "HpD">0</span> Hydrogen Atoms (Protium).<br>
-    They boost your total energy production by the square root of their amount. 
-      You are getting a <span id = "HpP">0</span>% boost to your energy production by your Hydrogen Atom (Protium) amount.
+    Reset your progress in exchange for some Hydrogen Atoms.<br><br>
+    <tables class="HydrogenTable">
+      <div class="AreaH1">
+      You will get as much Protium (<sup>1</sup>H) as the minimum of your protons and electrons.<br>
+      <button class="Bprestige1" onclick = "p1(1)">
+        Make some Protium in exchange for your subatomic particles!
+      </button>
+      <br>You have <span id = "H1D">0</span> Protium.
+      <br><br>They boost your total energy production by 1+sqrt(Protium).
+      <br><br>They are currently boosting your energy production by <span id="H1P">1</span>x.
+    </div>
+
+    <div class="AreaH2" id="H2square">
+      You will get as much Deuterium (<sup>2</sup>H) as the minimum of your protons, neutrons, and electrons.<br>
+      <button class="Bprestige1" onclick = "p1(2)">
+        Make some Deuterium in exchange for your subatomic particles!
+      </button>
+      <br>You have <span id = "H2D">0</span> Deuterium.
+      <br><br>They boost your total energy production by 1+sqrt(Deuterium).
+      <br><br>They are currently boosting your energy production by <span id="H2P">1</span>x.
+    </div>
+  </tables><br>
+      You are getting a <span id = "HpP">1</span>x boost to your energy production from all Hydrogen atoms.
     <br><br><br>
     </div>
     
@@ -177,6 +192,11 @@
           <div class="achF" id="ach23D">A question mark move<span class="tooltip">Have at least 4 neutrons but no neutrinos.</span></div>
           <div class="achF" id="ach24D">Enough for Carbon-12<span class="tooltip">Have at least 6 neutrons.</span></div>
           <div class="achF" id="ach25D">What do we call this?<span class="tooltip">Have at least 5 neutrons but no protons and no electrons.</span></div>
+          <div class="achF" id="ach26D">Billionaire<span class="tooltip">Create a total of at least 1 billion energy.</span></div>
+          <div class="achF" id="ach27D">Bulked up<span class="tooltip">Make at least 40 subatomic particles in a single purchase.</span></div>
+          <div class="achF" id="ach28D">Bonus! 2<span class="tooltip">Have a total of at least 25 achievements.</span></div>
+          <div class="achF" id="ach29D">Heavier than a hundred Carbons<span class="tooltip">Have the mass of all your stuff exceed 1200 amu.</span></div>
+          <div class="achF" id="ach30D">Historic run<span class="tooltip">Have a total of at least 500 million energy on hand without any neutrinos or neutrons on hand.</span></div>
         </tables>
       </div>
       
@@ -195,12 +215,13 @@
         v1.3.1: 3-14-2022: Fixed a bug where the CSS and JS were not recognized by the HTML.<br>
         v1.3.2: 3-14-2022: Fixed a bug where the game kept hard resetting.<br>
         v1.3.3: 3-14-2022: Fixed a bug where protons do nothing directly after a hard reset.<br>
-        v1.3.4: 3-19-2022: Added a new formatting option, added subtabs for the Misc. (previously Changelog) tab, and added a hotkey "H" for Hydrogen atom resets!<br>
+        v1.3.4: 3-19-2022: Added a new formatting option, added subtabs for the Misc. (formerly Changelog) tab, and added a hotkey "H" for Hydrogen atom resets!<br>
         v1.3.5: 3-19-2022: Fixed a bug where the minimum power for scientific notation was undefined.<br>
         v1.4: 3-19-2022: Added achievements! There are 20 of them in this initial batch.<br>
         v1.4.6: 3-20-2022: Fixed a typo and a game-breaking bug.<br>
         v1.5: 3-22-2022: Added neutrons! Also added 5 new achievements and a button to export your save.<br>
-	v1.5.1: 3-23-2022: Fixed a bug where you could get negative protons, negative electrons, and negative neutrinos.<br>
+        v1.5.1: 3-23-2022: Fixed a bug where you could get negative protons, negative electrons, and negative neutrinos.
+        <br>v1.6: 3-25-2022: Added Deuterium! Also added 5 new achievements and fixed a bug where hard resetting doesn't reset achievements.
       </div>
       
       <div id = "tabM.4">

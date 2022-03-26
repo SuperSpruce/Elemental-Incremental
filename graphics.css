@@ -127,6 +127,26 @@ body {
     background-color: #99ddff;
     cursor: pointer;
   }
+
+  button.Bprestige1 {
+    border: none;
+    border-radius: 32px;
+    padding: 4px 32px;
+    margin: 4px 4px;
+    font-size: 20px;
+    color: #ee7777;
+    background-color: #000000;
+  }
+  button.Bprestige1:hover {
+    border: none;
+    border-radius: 32px;
+    padding: 4px 32px;
+    margin: 4px 4px;
+    font-size: 20px;
+    color: #ffbbbb;
+    background-color: #552200;
+    cursor: pointer;
+  }
   
   
   
@@ -290,4 +310,32 @@ body {
   }
   .achT:hover .tooltip {
     visibility: visible;
+  }
+
+
+  tables.HydrogenTable {
+    display: grid;
+    grid-template-columns: repeat(3, 300px);
+    grid-auto-columns: 300px;
+    grid-auto-rows: 300px;
+  }
+  .AreaH1 {
+    background-color: #88cc88;
+    border: 4px solid #aaaa33;
+    padding: 8px 12px;
+    margin: -4px -4px;
+    text-align: center;
+    position: relative;
+    display: inline-block;
+    color: #000000;
+  }
+  .AreaH2 {
+    background-color: #77cc77;
+    border: 4px solid #aaaa33;
+    padding: 8px 12px;
+    margin: -4px -4px;
+    text-align: center;
+    position: relative;
+    display: inline-block;
+    color: #000000;
   }
