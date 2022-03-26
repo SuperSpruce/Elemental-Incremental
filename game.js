@@ -508,7 +508,7 @@ var game = {
     }
   }
   
-  function makeMaxNeutrons() {
+    function makeMaxNeutrons() {
     if(game.energy / (1e9 * (game.neutronCostMult - 1)) > game.neutronCost)
       logBuy(-2, game.neutronCost, game.neutronCostMult);
 
@@ -570,6 +570,7 @@ var game = {
     document.getElementById("neutrinoP").innerHTML = Math.round(1 + game.neutrinoPower);
     document.getElementById("clickD").innerHTML = format(game.Hpower * game.clickPower * game.ach.power, 2);
   }
+
   
   
   
