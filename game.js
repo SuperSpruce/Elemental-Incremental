@@ -3,7 +3,6 @@ var game = {
     totalEnergy: 0,
     clickPower: 1,
     clickStat: 0,
-    u1: false,
     proton: 0,
     protonPower: 0,
     protonSpeed: 1000,
@@ -44,6 +43,21 @@ var game = {
     tritium: 0,
     Hpower: 1,
     totalMass: 0,
+
+    u1: false,
+    nu: {
+      num: 3,
+      id: new Array(3)
+    },
+    ru: {
+      num: 7,
+      id: new Array(7),
+    },
+    iu: {
+      num: 1,
+      id: new Array(1)
+    },
+
     ach: {
       num: 30,
       get: 0,
@@ -61,6 +75,7 @@ var game = {
   const MAX_VALUE = 1.79769312e308;
   var energyLastSecond = MAX_VALUE;
   var lastResetTime = 0;
+  const ruBaseCost = [10, 1, 1e8, [50, 5, 5e8], [500, 25, 1.6e9]];
   
   
   
@@ -77,7 +92,7 @@ var game = {
       return Math.floor(seconds / 60) + "min, " + seconds%60 + "s";
     else if(seconds < 86400)
       return Math.floor(seconds / 3600) + "hr, " + Math.floor((seconds/ 60) % 60) + "min, " + seconds%60 + "s";
-    else if(seconds < 31557600) //That's 86400 * 365.25
+    else if(seconds < 31557600) //That's 86400 * 365.25. Yes, I'm assuming a year is 365.25 days here.
       return Math.floor(seconds / 86400) + "day, " + Math.floor((seconds / 3600) % 60) + "hr, " + Math.floor((seconds/ 60) % 60) + "min";
     else if(Math.floor(Math.log10(seconds / 31557600)) < game.minPowerForSci)
       return Math.floor(seconds / 31557600) + "yr, " + Math.floor((seconds / 86400) % 365.25) + "day";
@@ -87,6 +102,8 @@ var game = {
   
   
   function format(amount, maxPrecision) {
+    if(amount < 0)
+      return amount;
     let power = Math.floor(Math.log10(amount));
     if (power < game.minPowerForSci && power > -5 || amount == 0) {
       if(maxPrecision == 0) {return Math.round(amount);}
@@ -117,33 +134,10 @@ var game = {
       return Math.log(input) / Math.log(base);
   }
   
-  function logBuy(type, initalCost, costMult) {
-      var quo = game.energy / initalCost;
-      var geoConst = 1 - (1 / costMult);
-      quo = Math.floor(logBase(costMult, quo * geoConst));
-      
-      if(quo > 0) {
-          var newCost = initalCost * Math.pow(costMult, quo);
-      
-          switch(type) {
-          case -1: 
-            game.proton += quo;
-                  game.protonCost = newCost;
-                  document.getElementById('protonD').innerHTML = format(game.proton);
-                  document.getElementById('protonC').innerHTML = format(Math.round(newCost));
-            game.protonCost10 = game.protonCost * (1 - Math.pow(game.protonCostMult, 10)) / (1 - game.protonCostMult);
-            game.protonCost100 = game.protonCost * (1 - Math.pow(game.protonCostMult, 100)) / (1 - game.protonCostMult);
-                  break;
-          case -3: 
-            game.electron += quo;
-                  game.electronCost = newCost;
-                  document.getElementById('electronD').innerHTML = format(game.electron);
-                  document.getElementById('electronC').innerHTML = format(Math.round(newCost));
-            game.electronCost10 = game.electronCost * (1 - Math.pow(game.electronCostMult, 10)) / (1 - game.electronCostMult);
-            game.electronCost100 = game.electronCost * (1 - Math.pow(game.electronCostMult, 100)) / (1 - game.electronCostMult);
-                  break;
-        }
-    }
+  function logBuy(initialCost, costMult, resourceSpent) {
+      let quo = resourceSpent / initialCost;
+      let geoConst = 1 - (1 / costMult);
+      return Math.ceil(logBase(costMult, quo * geoConst));
   }
   
   function Crandom(chance, recursionLevel) {
@@ -268,11 +262,13 @@ var game = {
   
   function makeMaxProtons()
   {
+    let count = 0;
     if(game.energy / (1e9 * (game.protonCostMult - 1)) > game.protonCost) {
-      logBuy(-1, game.protonCost, game.protonCostMult);
+      count = logBuy(game.protonCost, game.protonCostMult, game.energy);
+      game.energy -= game.protonCost / (1 - 1/game.protonCostMult) * Math.pow(game.protonCostMult, count - 1);
+      game.protonCost *= Math.pow(game.protonCostMult, count);
     }
       else {
-    let count = 0;
     while(game.energy > game.protonCost) {
       if(game.energy > game.protonCost100) {
         game.energy -= game.protonCost100;
@@ -295,6 +291,7 @@ var game = {
         count++;
       }
     }
+  }
     if(count >= 40 && !game.ach.id[26]) {
       game.ach.id[26] = true; 
       updateAchievementColors();
@@ -309,7 +306,6 @@ var game = {
     document.getElementById("protonD").innerHTML = game.proton;
     document.getElementById("protonP").innerHTML = format(game.Hpower * game.protonPower * game.ach.power * 1000 / game.protonSpeed, 2);
     document.getElementById("protonC").innerHTML = format(game.protonCost, 0);
-      }
   }
   
   function updateProtonSpeed() {
@@ -324,7 +320,7 @@ var game = {
   }
   
   function updateElectronPower() {
-    game.electronPower = game.electron * (1+game.neutrinoPower) * Math.pow(1 + game.neutronPower/2, 2);
+    game.electronPower = game.electron * (1+game.neutrinoPower) * Math.pow(1 + game.neutronPower/2, 2) * Math.pow(3, game.ru.id[4]);
     game.clickPower = (1 + game.neutrinoPower) * Math.pow(1 + game.neutronPower/2, 2) + game.electronPower;
   }
   
@@ -362,11 +358,13 @@ var game = {
   
   function makeMaxElectrons()
   {
+    let count = 0;
     if(game.energy / (1e9 * (game.electronCostMult - 1)) > game.electronCost) {
-      logBuy(-3, game.electronCost, game.electronCostMult);
+      count = logBuy(game.electronCost, game.electronCostMult, game.energy);
+      game.energy -= game.electronCost / (1 - 1/game.electronCostMult) * Math.pow(game.electronCostMult, count - 1);
+      game.electronCost *= Math.pow(game.electronCostMult, count);
     }
       else {
-    let count = 0;
     while(game.energy > game.electronCost) {
       if(game.energy > game.electronCost100) {
         game.energy -= game.electronCost100;
@@ -431,11 +429,13 @@ var game = {
   
   function makeMaxNeutrinos()
   {
+    let count = 0;
     if(game.energy / (1e9 * (game.electronCostMult - 1)) > game.electronCost) {
-      logBuy(-4, game.neutrinoCost, game.neutrinoCostMult);
+      count = logBuy(game.neutrinoCost, game.neutrinoCostMult, game.energy);
+      game.energy -= game.neutrinoCost / (1 - 1/game.neutrinoCostMult) * Math.pow(game.neutrinoCostMult, count - 1);
+      game.neutrinoCost *= Math.pow(game.neutrinoCostMult, count);
     }
       else {
-    let count = 0;
     while(game.energy > game.neutrinoCost) {
       if(game.energy > game.neutrinoCost100) {
         game.energy -= game.neutrinoCost100;
@@ -508,11 +508,17 @@ var game = {
     }
   }
   
-    function makeMaxNeutrons() {
-    if(game.energy / (1e9 * (game.neutronCostMult - 1)) > game.neutronCost)
-      logBuy(-2, game.neutronCost, game.neutronCostMult);
-
-      let count = 0;
+  function makeMaxNeutrons() {
+    let count = 0;
+    if(game.energy / (1e9 * (game.neutronCostMult - 1)) > game.neutronCost) {
+      count = Math.min(game.proton, game.electron, game.neutrino, logBuy(game.neutronCost, game.neutronCostMult, game.energy));
+      game.energy -= game.neutronCost / (1 - 1/game.neutronCostMult) * Math.pow(game.neutronCostMult, count - 1);
+      game.neutronCost *= Math.pow(game.neutronCostMult, count);
+      game.proton -= count;
+      game.electron -= count;
+      game.neutrino -= count;
+    }
+    else {
       while(game.energy > game.neutronCost && game.proton >= 1 && game.electron >= 1 && game.neutrino >= 1) {
         if(game.energy > game.neutronCost100 && game.proton >= 100 && game.electron >= 100 && game.neutrino >= 100) {
           game.energy -= game.neutronCost100;
@@ -524,7 +530,6 @@ var game = {
           game.proton -= 100;
           game.electron -= 100;
           game.neutrino -= 100;
-          game.totalMass += 100.86649;
         }
         else if(game.energy > game.neutronCost10 && game.proton >= 10 && game.electron >= 10 && game.neutrino >= 10) {
           game.energy -= game.neutronCost10;
@@ -535,7 +540,6 @@ var game = {
           game.proton -= 10;
           game.electron -= 10;
           game.neutrino -= 10;
-          game.totalMass += 10.086649;
         }
         else {
           game.energy -= game.neutronCost;
@@ -544,9 +548,9 @@ var game = {
           game.proton--;
           game.electron--;
           game.neutrino--;
-          game.totalMass += 1.0086649;
         }
       }
+    }
     if(count >= 40 && !game.ach.id[26]) {
       game.ach.id[26] = true; 
       updateAchievementColors();
@@ -555,6 +559,7 @@ var game = {
     game.neutron += count;
     game.neutrinoPower = game.neutrino;
     game.neutronPower = game.neutron;
+    updateMass();
     updatePePower();
     game.neutronCost10 = game.neutronCost * (1 - Math.pow(game.neutronCostMult, 10)) / (1 - game.neutronCostMult);
     game.neutronCost100 = game.neutronCost * (1 - Math.pow(game.neutronCostMult, 100)) / (1 - game.neutronCostMult);
@@ -570,53 +575,10 @@ var game = {
     document.getElementById("neutrinoP").innerHTML = Math.round(1 + game.neutrinoPower);
     document.getElementById("clickD").innerHTML = format(game.Hpower * game.clickPower * game.ach.power, 2);
   }
-
   
   
   
   
-  function u1b()
-  {
-    if(game.H >= 100 && !game.u1)
-      {
-        game.u1 = true;
-        game.H -= 100;
-        game.protonSpeed /= 2;
-        game.Hpower = Math.sqrt(game.H + 1) * Math.sqrt(game.deu + 1);
-        document.getElementById("H1D").innerHTML = game.H;
-        document.getElementById("H1P").innerHTML = format(Math.sqrt(game.H + 1), 2);
-        document.getElementById("HpP").innerHTML = format(game.Hpower, 2);
-        document.getElementById("u1p").innerHTML = game.u1;
-        document.getElementById("clickD").innerHTML = format(game.Hpower * game.clickPower * game.ach.power, 2);
-        document.getElementById("protonP").innerHTML = format(game.Hpower * game.protonPower * game.ach.power * 1000 / game.protonSpeed, 2);   
-        document.getElementById("electronP").innerHTML = format(game.Hpower * game.electronPower * game.ach.power, 2);
-        updateProtonSpeed();
-      }
-  }
-  
-  function w2b() {
-    if(game.energy >= 10000 && game.unlockStage == 1) {
-      game.unlockStage++;
-      game.energy -= 10000;
-      document.getElementById("energyDisplay").innerHTML = format(game.energy, 0);
-      hideAndShow();
-    }
-  }
-  
-  function w3b() {
-    if(game.H >= 20 && game.unlockStage == 2) {
-      game.unlockStage++;
-      game.H -= 20;
-      game.Hpower = Math.sqrt(game.H + 1) * Math.sqrt(game.deu + 1);
-      document.getElementById("H1D").innerHTML = game.H;
-      document.getElementById("H1P").innerHTML = format(Math.sqrt(game.H + 1), 2);
-      document.getElementById("HpP").innerHTML = format(game.Hpower, 2);
-      document.getElementById("clickD").innerHTML = format(game.Hpower * game.clickPower * game.ach.power, 2);
-      document.getElementById("protonP").innerHTML = format(game.Hpower * game.protonPower * game.ach.power * 1000 / game.protonSpeed, 2);
-      document.getElementById("electronP").innerHTML = format(game.Hpower * game.electronPower * game.ach.power, 2);
-      hideAndShow();
-    }
-  }
   
   
   
@@ -719,6 +681,9 @@ var game = {
         document.getElementById('tab1c').style.visibility = "hidden";
         document.getElementById('tab1d').style.visibility = "hidden";
         document.getElementById('H2square').style.visibility = "hidden";
+        document.getElementById('upgradeTable1').style.visibility = "hidden";
+        document.getElementById('ru1').style.visibility = "visible";
+        document.getElementById('iu1').style.visibility = "visible";
         break;
         
       case 2:
@@ -728,6 +693,9 @@ var game = {
         document.getElementById('tab1c').style.visibility = "visible";
         document.getElementById('tab1d').style.visibility = "hidden";
         document.getElementById('H2square').style.visibility = "hidden";
+        document.getElementById('upgradeTable1').style.visibility = "hidden";
+        document.getElementById('ru1').style.visibility = "visible";
+        document.getElementById('iu1').style.visibility = "visible";
         break;
         
       case 3:
@@ -737,6 +705,7 @@ var game = {
         document.getElementById('tab1c').style.visibility = "hidden";
         document.getElementById('tab1d').style.visibility = "visible";
         document.getElementById('H2square').style.visibility = "visible";
+        document.getElementById('upgradeTable1').style.visibility = "visible";
         break;
     }
   }
@@ -987,12 +956,21 @@ var game = {
     document.getElementById("neutrinoD").innerHTML = game.neutrino;
     document.getElementById("neutrinoP").innerHTML = Math.round(1 + game.neutrino);
     document.getElementById("clickD").innerHTML = format(game.Hpower * game.clickPower * game.ach.power, 2);
+    document.getElementById("ru1Level").innerHTML = game.ru.id[0];
+    document.getElementById("ru1Cost").innerHTML = Math.round(ruBaseCost[0] * Math.pow(1.1, game.ru.id[0]));
+    document.getElementById("ru2Level").innerHTML = game.ru.id[1];
+    document.getElementById("ru2Cost").innerHTML = Math.round(ruBaseCost[1] * Math.pow(1.1, game.ru.id[1]));
+    document.getElementById("ru3Level").innerHTML = game.ru.id[2];
+    document.getElementById("ru3Cost").innerHTML = format(ruBaseCost[2] * Math.pow(1.6, game.ru.id[2]), 0);
+    document.getElementById("ru4Level").innerHTML = game.ru.id[3];
+    document.getElementById("ru4CostProtium").innerHTML = format(ruBaseCost[3][0] * Math.pow(1.25, game.ru.id[3]), 0);
+    document.getElementById("ru4CostDeuterium").innerHTML = format(ruBaseCost[3][1] * Math.pow(1.25, game.ru.id[3]), 0);
+    document.getElementById("ru4CostEnergy").innerHTML = format(ruBaseCost[3][2] * Math.pow(1.5, game.ru.id[3]), 0);
     document.getElementById("H1D").innerHTML = game.H;
     document.getElementById("H1P").innerHTML = format(Math.sqrt(game.H + 1), 2);
     document.getElementById("H2D").innerHTML = game.deu;
     document.getElementById("H2P").innerHTML = format(Math.sqrt(game.deu + 1), 2);
     document.getElementById("HpP").innerHTML = format(game.Hpower, 2);
-    document.getElementById("u1p").innerHTML = game.u1;
     document.getElementById("sigFigD").innerHTML = game.sigFigs;
     document.getElementById("minPowerForSciD").innerHTML = game.minPowerForSci;
     document.getElementById("minPowerForSciD2").innerHTML = game.minPowerForSci;
@@ -1011,8 +989,8 @@ var game = {
     if(!game.protonInitCost) game.protonInitCost = 20;
     if(!game.protonCostMult) game.protonCostMult = 4/3;
     if(!game.protonCost) game.protonCost = 20;
-    if(!game.protonCost10) game.protonCost10 = 20 * (1 - Math.pow(4/3, 10)) / (1 - 4/3);
-    if(!game.protonCost100) game.protonCost100 = 20 * (1 - Math.pow(4/3, 100)) / (1 - 4/3);
+    if(!game.protonCost10) game.protonCost10 = 20 * (1 - Math.pow(game.protonCostMult, 10)) / (1 - game.protonCostMult);
+    if(!game.protonCost100) game.protonCost100 = 20 * (1 - Math.pow(game.protonCostMult, 100)) / (1 - game.protonCostMult);
     if(!game.neutron) game.neutron = 0;
     if(!game.neutronPower) game.neutronPower = 0;
     if(!game.neutronHL) game.neutronHL = 600;
@@ -1023,22 +1001,22 @@ var game = {
     if(!game.neutronInitCost) game.neutronInitCost = 1e6;
     if(!game.neutronCostMult) game.neutronCostMult = 1.5;
     if(!game.neutronCost) game.neutronCost = 1e6;
-    if(!game.neutronCost10) game.neutronCost10 = 1e6 * (1 - Math.pow(1.5, 10)) / (1 - 1.5);
-    if(!game.neutronCost100) game.neutronCost100 = 1e6 * (1 - Math.pow(1.5, 100)) / (1 - 1.5);
+    if(!game.neutronCost10) game.neutronCost10 = 1e6 * (1 - Math.pow(game.neutronCostMult, 10)) / (1 - game.neutronCostMult);
+    if(!game.neutronCost100) game.neutronCost100 = 1e6 * (1 - Math.pow(game.neutronCostMult, 100)) / (1 - game.neutronCostMult);
     if(!game.electron) game.electron = 0;
     if(!game.electronPower) game.electronPower = 0;
     if(!game.electronInitCost) game.electronInitCost = 50;
     if(!game.electronCostMult) game.electronCostMult = 1.33;
     if(!game.electronCost) game.electronCost = 50;
-    if(!game.electronCost10) game.electronCost10 = 50 * (1 - Math.pow(1.33, 10)) / (1 - 1.33);
-    if(!game.electronCost100) game.electronCost100 = 50 * (1 - Math.pow(1.33, 100)) / (1 - 1.33);
+    if(!game.electronCost10) game.electronCost10 = 50 * (1 - Math.pow(game.electronCostMult, 10)) / (1 - game.electronCostMult);
+    if(!game.electronCost100) game.electronCost100 = 50 * (1 - Math.pow(game.electronCostMult, 100)) / (1 - game.electronCostMult);
     if(!game.neutrino) game.neutrino = 0;
     if(!game.neutrinoPower) game.neutrinoPower = 0;
     if(!game.neutrinoInitCost) game.neutrinoInitCost = 100000;
     if(!game.neutrinoCostMult) game.neutrinoCostMult = 2;
     if(!game.neutrinoCost) game.neutrinoCost = 100000;
-    if(!game.neutrinoCost10) game.neutrinoCost10 = 100000 * (1 - Math.pow(2, 10)) / (1 - 2);
-    if(!game.neutrinoCost100) game.neutrinoCost100 = 100000 * (1 - Math.pow(2, 100)) / (1 - 2);
+    if(!game.neutrinoCost10) game.neutrinoCost10 = 100000 * (1 - Math.pow(game.neutrinoCostMult, 10)) / (1 - game.neutrinoCostMult);
+    if(!game.neutrinoCost100) game.neutrinoCost100 = 100000 * (1 - Math.pow(game.neutrinoCostMult, 100)) / (1 - game.neutrinoCostMult);
     if(!game.H) game.H = 0;
     if(!game.deu) game.deu = 0;
     if(!game.tritium) game.tritium = 0;
@@ -1047,6 +1025,53 @@ var game = {
     if(!game.clickStat) game.clickStat = 0;
     if(!game.protonSpeed) game.protonSpeed = 1000;
     if(!game.u1) game.u1 = false;
+
+    if(!game.iu) {
+      game.iu = {
+        num: 1,
+        id: new Array(1)
+      }
+    }
+    if(!game.iu.num || game.iu.num != 1) game.iu.num = 1;
+    if(!game.iu.id) {
+      game.iu.id = new Array(game.iu.num);
+      for(let i = 0; i < game.iu.num; i++)
+        game.iu.id[i] = 0;
+    }
+    if(game.iu.id.length != game.iu.num) {
+      let a = game.iu.id;
+      game.iu.id = new Array(game.iu.num);
+      for(let i = 0; i < Math.min(a.length, game.iu.num); i++) 
+        game.iu.id[i] = a[i];
+    }
+    for(let i = 0; i < game.iu.num; i++) {
+      if(!game.iu.id[i])
+        game.iu.id[i] = 0;
+    }
+    
+    if(!game.ru) {
+      game.ru = {
+        num: 7,
+        id: new Array(7)
+      }
+    }
+    if(!game.ru.num || game.ru.num != 7) game.ru.num = 7;
+    if(!game.ru.id) {
+      game.ru.id = new Array(game.ru.num);
+      for(let i = 0; i < game.ru.num; i++)
+        game.ru.id[i] = 0;
+    }
+    if(game.ru.id.length != game.ru.num) {
+      let a = game.ru.id;
+      game.ru.id = new Array(game.ru.num);
+      for(let i = 0; i < Math.min(a.length, game.ru.num); i++) 
+        game.ru.id[i] = a[i];
+    }
+    for(let i = 0; i < game.ru.num; i++) {
+      if(!game.ru.id[i])
+        game.ru.id[i] = 0;
+    }
+
     if(!game.totalMass) game.totalMass = 0;
     if(!game.unlockStage) game.unlockStage = 0;
     if(!game.sigFigs) game.sigFigs = 4;
@@ -1122,6 +1147,12 @@ var game = {
     game.protonSpeed = 1000;
     game.u1 = false;
     game.totalMass = 0;
+    game.ru.num = 7;
+    for(let i = 0; i < game.ru.num; i++)
+      game.ru.id[i] = 0;
+    game.iu.num = 1;
+    for(let i = 0; i < game.ru.num; i++)
+      game.iu.id[i] = 0;
     game.ach.num = 30;
     for(let i = 0; i < game.ach.num; i++)
       game.ach.id[i] = false;
@@ -1153,4 +1184,3 @@ var game = {
       document.getElementById("tabM").style.display = "inline-block";
   }
   // go to a tab for the first time, so not all show
-    load(0);

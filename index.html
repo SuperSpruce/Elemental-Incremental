@@ -12,6 +12,7 @@
     <!-- import the webpage's javascript file -->
     <script src="./game.js" defer></script>
     <!--<script src="./achievements.js" defer></script> -->
+    <script src="./upgrades.js" defer></script>
   </head>  
   <body>
     
@@ -20,7 +21,7 @@
 			<button class="Btab1" onclick="tab('tabM.1')">Misc.</button>
 			<button class="Btab2" onclick="tab('tab1')">Subatomic Particles</button>
 			<button class="Btab3" onclick="tab('tab2')">Atoms</button>
-      <button class="Btab4" id="unlock1" visibility="hidden" onclick="tab('tabU1')">Basic Atomic Upgrades</button>
+      <button class="Btab4" id="unlock1" visibility="hidden" onclick="tab('tabU1')">Upgrades</button>
 		</div><br><br>
     
     
@@ -131,9 +132,100 @@
     
     
     <div id = "tabU1">
-      <button onclick = "u1b()">
-      Purchased: <span id = "u1p">false</span>
-      </button> Double the speed of protons. Cost: 100 Hydrogen Atoms (Protium). <br>
+      <tables class="upgradeTable1" id="upgradeTable1">
+        <upgrade class="ruSlot" id="ru1">
+          <upgrade class="ruSlotText">
+            Decrease the cost scaling of protons by 1%.<br><br>
+            Cost: <span id="ru1Cost">10 anti</span> Protium.<br>
+            Level <span id="ru1Level">bug</span><br>
+          </upgrade>
+          <button class="ruBuy1CannotAfford" id="ru1Buy1" onclick="ru1One()">
+            Buy 1
+          </button>
+          <button class="ruBuyMaxCannotAfford" id="ru1BuyMax" onclick="ru1Max()">
+            Buy max
+          </button>
+        </upgrade>
+        <upgrade class="ruSlot" id="ru2">
+          <upgrade class="ruSlotText">
+            Decrease the cost scaling of electrons by 1%.<br><br>
+            Cost: <span id="ru2Cost">1 anti</span> Deuterium.<br>
+            Level <span id="ru2Level">bug</span><br>
+          </upgrade>
+          <button class="ruBuy1CannotAfford" id="ru2Buy1" onclick="ru2One()">
+            Buy 1
+          </button>
+          <button class="ruBuyMaxCannotAfford" id="ru2BuyMax" onclick="ru2Max()">
+            Buy max
+          </button>
+        </upgrade>
+
+        <upgrade class="ruSlot" id="ru3">
+          <upgrade class="ruSlotText">
+            Decrease the cost scaling of neutrinos by 2%.<br><br>
+            Cost: <span id="ru3Cost">1e7 anti</span> energy.<br>
+            Level <span id="ru3Level">bug</span><br>
+          </upgrade>
+          <button class="ruBuy1CannotAfford" id="ru3Buy1" onclick="ru3One()">
+            Buy 1
+          </button>
+          <button class="ruBuyMaxCannotAfford" id="ru3BuyMax" onclick="ru3Max()">
+            Buy max
+          </button>
+        </upgrade>
+
+        <upgrade class="ruSlot" id="ru4">
+          <upgrade class="ruSlotText">
+            Decrease the cost scaling of neutrons by 2%.<br><br>
+            Cost: <span id="ru4CostProtium">50</span> Protium, <span id="ru4CostDeuterium">5</span> Deuterium, and <span id="ru4CostEnergy">5e8</span> energy.<br>
+            Level <span id="ru4Level">bug</span><br>
+          </upgrade>
+          <button class="ruBuy1CannotAfford" id="ru4Buy1" onclick="ru4One()">
+            Buy 1
+          </button>
+          <button class="ruBuyMaxCannotAfford" id="ru4BuyMax" onclick="ru4Max()">
+            Buy max
+          </button>
+        </upgrade>
+        <button class="UCannotAfford" id="iu1" onclick = "iu1b()">
+          <span id="iu1desc">If you can read this, the game is bugged</span>.<br><br>
+          <span id="iu1ProtiumCost">Cost: 123 Protium</span><span id="iu1DeuteriumCost">, lol Deuterium</span><span id="iu1EnergyCost">, XD energy.</span><br>
+          Level <span id = "iu1Level">0</span><br>
+        </button> 
+        <button class="UCannotAfford" id="ru5" onclick = "ru5One()">
+          <span id="ru5desc">Triple the effectiveness of electrons</span>.<br><br>
+          <span id="ru5ProtiumCost">Cost: 123 Protium, </span><span id="ru5DeuteriumCost">lol Deuterium, and </span><span id="ru5EnergyCost">XD  energy.</span><br>
+          Level <span id = "ru5Level">0</span><br>
+        </button> 
+        <!--
+        <upgrade class="ruSlot" id="ru6">
+          <upgrade class="ruSlotText">
+            Add 25% to the multiplicative bonus when your proton amount reaches the end of a row of the periodic table.<br><br>
+            Cost: 10 Protium, 1 Deuterium, and 1e7 energy.<br>
+            Level 0<br>
+          </upgrade>
+          <button class="ruBuy1CannotAfford" id="ru6Buy1">
+            Buy 1
+          </button>
+          <button class="ruBuyMaxCannotAfford" id="ru6BuyMax">
+            Buy max
+          </button>
+        </upgrade>
+
+        <upgrade class="ruSlot" id="ru7">
+          <upgrade class="ruSlotText">
+            Add 25% to the multiplicative bonus when your electron amount reaches the end of a row of the periodic table.<br><br>
+            Cost: 10 Protium, 1 Deuterium, and 1e7 energy.<br>
+            Level 0<br>
+          </upgrade>
+          <button class="ruBuy1CannotAfford" id="ru7Buy1">
+            Buy 1
+          </button>
+          <button class="ruBuyMaxCannotAfford" id="ru7BuyMax">
+            Buy max
+          </button>
+        </upgrade> -->
+      </tables>
     </div>
     
     

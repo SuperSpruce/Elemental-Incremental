@@ -130,7 +130,7 @@ body {
 
   button.Bprestige1 {
     border: none;
-    border-radius: 32px;
+    border-radius: 16px;
     padding: 4px 32px;
     margin: 4px 4px;
     font-size: 20px;
@@ -139,12 +139,158 @@ body {
   }
   button.Bprestige1:hover {
     border: none;
-    border-radius: 32px;
+    border-radius: 16px;
     padding: 4px 32px;
     margin: 4px 4px;
     font-size: 20px;
     color: #ffbbbb;
     background-color: #552200;
+    cursor: pointer;
+  }
+
+
+  button.UCannotAfford {
+    border: 4px solid #aaaaaa;
+    padding: 8px 12px;
+    margin: -4px -4px;
+    color: #ffffff;
+    font-size: 12px;
+    background-color: #661a22;
+    width: 254px;
+    height: 146px;
+  }
+  button.UCannotAfford:hover {
+    background-color: #771c22;
+    cursor: pointer;
+  }
+
+  button.UCanAfford {
+    border: 4px solid #aaaaaa;
+    padding: 8px 12px;
+    margin: -4px -4px;
+    color: #ffffff;
+    font-size: 12px;
+    background-color: #22661a;
+    width: 254px;
+    height: 146px;
+  }
+  button.UCanAfford:hover {
+    background-color: #299922;
+    cursor: pointer;
+  }
+
+  button.UMaxed {
+    border: 4px solid #aaaaaa;
+    padding: 8px 12px;
+    margin: -4px -4px;
+    color: #ffffff;
+    font-size: 12px;
+    background-color: #222888;
+    width: 254px;
+    height: 146px;
+  }
+  button.UMaxed:hover {
+    background-color: #333999;
+    cursor: pointer;
+  }
+
+
+  tables.upgradeTable1 {
+    display: grid;
+    grid-template-columns: repeat(4, 246px);
+    grid-auto-columns: 246px;
+    grid-column-gap: 4px;
+    grid-auto-rows: 138px;
+    grid-row-gap: 4px;
+  }
+
+  .ruSlot {
+    display: grid;
+    grid-template-columns: 125px 125px;
+    grid-auto-columns: 125px;
+    grid-auto-rows: 108px 34px;
+    border: 4px solid #aaaaaa;
+    margin: -4px -4px;
+    color: #000000;
+    font-size: 14px;
+    background-color: #cccc99;
+  }
+
+  .ruSlotText {
+    text-align: center;
+    font-size: 12px;
+    padding: 6px 8px;
+    grid-column: 1 / 3;
+    grid-row: 1;
+  }
+
+  button.ruBuy1CannotAfford {
+    border: 4px solid #999999;
+    margin: -4px -4px;
+    padding: 4px 8px;
+    position: relative;
+    width: 125px;
+    height: 34px;
+    left: 4px;
+    grid-column: 1;
+    grid-row: 2;
+    color: #ffffff;
+    background-color: #661a22;
+  }
+  button.ruBuy1CannotAfford:hover {
+    background-color: #771c22;
+    cursor: pointer;
+  }
+
+  button.ruBuy1CanAfford {
+    border: 4px solid #999999;
+    margin: -4px -4px;
+    padding: 4px 8px;
+    position: relative;
+    width: 125px;
+    height: 34px;
+    left: 4px;
+    grid-column: 1;
+    grid-row: 2;
+    color: #ffffff;
+    background-color: #22661a;
+  }
+  button.ruBuy1CanAfford:hover {
+    background-color: #299922;
+    cursor: pointer;
+  }
+
+  button.ruBuyMaxCannotAfford {
+    border: 4px solid #999999;
+    margin: -4px -4px;
+    padding: 4px 8px;
+    position: relative;
+    width: 125px;
+    height: 34px;
+    grid-column: 2;
+    grid-row: 2;
+    color: #ffffff;
+    background-color: #661a22;
+  }
+  button.ruBuyMaxCannotAfford:hover {
+    background-color: #771c22;
+    cursor: pointer;
+  }
+
+  button.ruBuyMaxCanAfford {
+    border: 4px solid #999999;
+    margin: -4px -4px;
+    padding: 4px 8px;
+    position: relative;
+    width: 125px;
+    height: 34px;
+    grid-column: 2;
+    grid-row: 2;
+    color: #ffffff;
+    background-color: #22661a;
+  }
+  button.ruBuyMaxCanAfford:hover {
+    background-color: #299922;
     cursor: pointer;
   }
   
@@ -237,6 +383,7 @@ body {
     background-color: #eebb44;
     cursor: pointer;
   }
+
   
   
   
@@ -261,6 +408,8 @@ body {
     background-color: #ffffff;
     cursor: pointer;
   }
+
+
   
   
   
@@ -315,7 +464,7 @@ body {
 
   tables.HydrogenTable {
     display: grid;
-    grid-template-columns: repeat(3, 300px);
+    grid-template-columns: repeat(3, 340px);
     grid-auto-columns: 300px;
     grid-auto-rows: 300px;
   }
