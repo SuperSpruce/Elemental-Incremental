@@ -161,7 +161,6 @@ body {
   }
   button.UCannotAfford:hover {
     background-color: #771c22;
-    cursor: pointer;
   }
 
   button.UCanAfford {
@@ -191,7 +190,6 @@ body {
   }
   button.UMaxed:hover {
     background-color: #333999;
-    cursor: pointer;
   }
 
 
@@ -239,7 +237,6 @@ body {
   }
   button.ruBuy1CannotAfford:hover {
     background-color: #771c22;
-    cursor: pointer;
   }
 
   button.ruBuy1CanAfford {
@@ -274,7 +271,6 @@ body {
   }
   button.ruBuyMaxCannotAfford:hover {
     background-color: #771c22;
-    cursor: pointer;
   }
 
   button.ruBuyMaxCanAfford {
@@ -450,7 +446,7 @@ body {
     text-align: center;
     padding: 4px 4px;
     border: 4px solid #aaaaaa;
-    border-radius: 6px;
+    border-radius: 12px;
     position: absolute;
     z-index: 1;
   }
@@ -487,4 +483,538 @@ body {
     position: relative;
     display: inline-block;
     color: #000000;
+  }
+
+
+
+
+  .tab2 {
+    position: relative;
+    top: -130px;
+  }
+
+
+  .periodicTable {
+    display: grid;
+    grid-template-columns: repeat(32, 31px);
+    grid-auto-rows: 29px;
+    grid-row-gap: 2px;
+    grid-auto-columns: 29px;
+    grid-column-gap: 2px;
+    position: relative;
+    top: -30px;
+    z-index: -1;
+  }
+
+  .unlockedElement {
+      border: 2px solid #aaaaaa;
+      margin: -2px -2px;
+      padding: 6px 4px;
+      text-align: center;
+      background-color: #227722;
+      color: #000000;
+  }
+  .lockedElement {
+    border: 2px solid #aaaaaa;
+    margin: -2px -2px;
+    padding: 6px 4px;
+    text-align: center;
+    background-color: #bb5522;
+    color: #000000;
+  }
+  .undevelopedElement {
+    border: 2px solid #aaaaaa;
+    margin: -2px -2px;
+    padding: 6px 4px;
+    text-align: center;
+    background-color: #777777;
+    color: #000000;
+  }
+
+  .HSquare {
+      grid-row: 1;
+      grid-column: 1;
+  }
+  .HeSquare {
+    grid-row: 1;
+    grid-column: 32;
+  }
+  .LiSquare {
+    grid-row: 2;
+    grid-column: 1;
+  }
+  .BeSquare {
+    grid-row: 2;
+    grid-column: 2;
+  }
+  .BSquare {
+    grid-row: 2;
+    grid-column: 27;
+  }
+  .CSquare {
+    grid-row: 2;
+    grid-column: 28;
+  }
+  .NSquare {
+    grid-row: 2;
+    grid-column: 29;
+  }
+  .OSquare {
+    grid-row: 2;
+    grid-column: 30;
+  }
+  .FSquare {
+    grid-row: 2;
+    grid-column: 31;
+  }
+  .NeSquare {
+    grid-row: 2;
+    grid-column: 32;
+  }
+  .NaSquare {
+    grid-row: 3;
+    grid-column: 1;
+  }
+  .MgSquare {
+    grid-row: 3;
+    grid-column: 2;
+  }
+  .AlSquare {
+    grid-row: 3;
+    grid-column: 27;
+  }
+  .SiSquare {
+    grid-row: 3;
+    grid-column: 28;
+  }
+  .PSquare {
+    grid-row: 3;
+    grid-column: 29;
+  }
+  .SSquare {
+    grid-row: 3;
+    grid-column: 30;
+  }
+  .ClSquare {
+    grid-row: 3;
+    grid-column: 31;
+  }
+  .ArSquare {
+    grid-row: 3;
+    grid-column: 32;
+  }
+  .KSquare {
+    grid-row: 4;
+    grid-column: 1;
+  }
+  .CaSquare {
+    grid-row: 4;
+    grid-column: 2;
+  }
+  .ScSquare {
+    grid-row: 4;
+    grid-column: 17;
+  }
+  .TiSquare {
+    grid-row: 4;
+    grid-column: 18;
+  }
+  .VSquare {
+    grid-row: 4;
+    grid-column: 19;
+  }
+  .CrSquare {
+    grid-row: 4;
+    grid-column: 20;
+  }
+  .MnSquare {
+    grid-row: 4;
+    grid-column: 21;
+  }
+  .FeSquare {
+    grid-row: 4;
+    grid-column: 22;
+  }
+  .CoSquare {
+    grid-row: 4;
+    grid-column: 23;
+  }
+  .NiSquare {
+    grid-row: 4;
+    grid-column: 24;
+  }
+  .CuSquare {
+    grid-row: 4;
+    grid-column: 25;
+  }
+  .ZnSquare {
+    grid-row: 4;
+    grid-column: 26;
+  }
+  .GaSquare {
+    grid-row: 4;
+    grid-column: 27;
+  }
+  .GeSquare {
+    grid-row: 4;
+    grid-column: 28;
+  }
+  .AsSquare {
+    grid-row: 4;
+    grid-column: 29;
+  }
+  .SeSquare {
+    grid-row: 4;
+    grid-column: 30;
+  }
+  .BrSquare {
+    grid-row: 4;
+    grid-column: 31;
+  }
+  .KrSquare {
+    grid-row: 4;
+    grid-column: 32;
+  }
+  .RbSquare {
+    grid-row: 5;
+    grid-column: 1;
+  }
+  .SrSquare {
+    grid-row: 5;
+    grid-column: 2;
+  }
+  .YSquare {
+    grid-row: 5;
+    grid-column: 17;
+  }
+  .ZrSquare {
+    grid-row: 5;
+    grid-column: 18;
+  }
+  .NbSquare {
+    grid-row: 5;
+    grid-column: 19;
+  }
+  .MoSquare {
+    grid-row: 5;
+    grid-column: 20;
+  }
+  .TcSquare {
+    grid-row: 5;
+    grid-column: 21;
+  }
+  .RuSquare {
+    grid-row: 5;
+    grid-column: 22;
+  }
+  .RhSquare {
+    grid-row: 5;
+    grid-column: 23;
+  }
+  .PdSquare {
+    grid-row: 5;
+    grid-column: 24;
+  }
+  .AgSquare {
+    grid-row: 5;
+    grid-column: 25;
+  }
+  .CdSquare {
+    grid-row: 5;
+    grid-column: 26;
+  }
+  .InSquare {
+    grid-row: 5;
+    grid-column: 27;
+  }
+  .SnSquare {
+    grid-row: 5;
+    grid-column: 28;
+  }
+  .SbSquare {
+    grid-row: 5;
+    grid-column: 29;
+  }
+  .TeSquare {
+    grid-row: 5;
+    grid-column: 30;
+  }
+  .ISquare {
+    grid-row: 5;
+    grid-column: 31;
+  }
+  .XeSquare {
+    grid-row: 5;
+    grid-column: 32;
+  }
+  .CsSquare {
+    grid-row: 6;
+    grid-column: 1;
+  }
+  .BaSquare {
+    grid-row: 6;
+    grid-column: 2;
+  }
+  .LaSquare {
+    grid-row: 6;
+    grid-column: 3;
+  }
+  .CeSquare {
+    grid-row: 6;
+    grid-column: 4;
+  }
+  .PrSquare {
+    grid-row: 6;
+    grid-column: 5;
+  }
+  .NdSquare {
+    grid-row: 6;
+    grid-column: 6;
+  }
+  .PmSquare {
+    grid-row: 6;
+    grid-column: 7;
+  }
+  .SmSquare {
+    grid-row: 6;
+    grid-column: 8;
+  }
+  .EuSquare {
+    grid-row: 6;
+    grid-column: 9;
+  }
+  .GdSquare {
+    grid-row: 6;
+    grid-column: 10;
+  }
+  .TbSquare {
+    grid-row: 6;
+    grid-column: 11;
+  }
+  .DySquare {
+    grid-row: 6;
+    grid-column: 12;
+  }
+  .HoSquare {
+    grid-row: 6;
+    grid-column: 13;
+  }
+  .ErSquare {
+    grid-row: 6;
+    grid-column: 14;
+  }
+  .TmSquare {
+    grid-row: 6;
+    grid-column: 15;
+  }
+  .YbSquare {
+    grid-row: 6;
+    grid-column: 16;
+  }
+  .LuSquare {
+    grid-row: 6;
+    grid-column: 17;
+  }
+  .HfSquare {
+    grid-row: 6;
+    grid-column: 18;
+  }
+  .TaSquare {
+    grid-row: 6;
+    grid-column: 19;
+  }
+  .WSquare {
+    grid-row: 6;
+    grid-column: 20;
+  }
+  .ReSquare {
+    grid-row: 6;
+    grid-column: 21;
+  }
+  .OsSquare {
+    grid-row: 6;
+    grid-column: 22;
+  }
+  .IrSquare {
+    grid-row: 6;
+    grid-column: 23;
+  }
+  .PtSquare {
+    grid-row: 6;
+    grid-column: 24;
+  }
+  .AuSquare {
+    grid-row: 6;
+    grid-column: 25;
+  }
+  .HgSquare {
+    grid-row: 6;
+    grid-column: 26;
+  }
+  .TlSquare {
+    grid-row: 6;
+    grid-column: 27;
+  }
+  .PbSquare {
+    grid-row: 6;
+    grid-column: 28;
+  }
+  .BiSquare {
+    grid-row: 6;
+    grid-column: 29;
+  }
+  .PoSquare {
+    grid-row: 6;
+    grid-column: 30;
+  }
+  .AtSquare {
+    grid-row: 6;
+    grid-column: 31;
+  }
+  .RnSquare {
+    grid-row: 6;
+    grid-column: 32;
+  }
+  .FrSquare {
+    grid-row: 7;
+    grid-column: 1;
+  }
+  .RaSquare {
+    grid-row: 7;
+    grid-column: 2;
+  }
+  .AcSquare {
+    grid-row: 7;
+    grid-column: 3;
+  }
+  .ThSquare {
+    grid-row: 7;
+    grid-column: 4;
+  }
+  .PaSquare {
+    grid-row: 7;
+    grid-column: 5;
+  }
+  .USquare {
+    grid-row: 7;
+    grid-column: 6;
+  }
+  .NpSquare {
+    grid-row: 7;
+    grid-column: 7;
+  }
+  .PuSquare {
+    grid-row: 7;
+    grid-column: 8;
+  }
+  .AmSquare {
+    grid-row: 7;
+    grid-column: 9;
+  }
+  .CmSquare {
+    grid-row: 7;
+    grid-column: 10;
+  }
+  .BkSquare {
+    grid-row: 7;
+    grid-column: 11;
+  }
+  .CfSquare {
+    grid-row: 7;
+    grid-column: 12;
+  }
+  .EsSquare {
+    grid-row: 7;
+    grid-column: 13;
+  }
+  .FmSquare {
+    grid-row: 7;
+    grid-column: 14;
+  }
+  .MdSquare {
+    grid-row: 7;
+    grid-column: 15;
+  }
+  .NoSquare {
+    grid-row: 7;
+    grid-column: 16;
+  }
+  .LrSquare {
+    grid-row: 7;
+    grid-column: 17;
+  }
+  .RfSquare {
+    grid-row: 7;
+    grid-column: 18;
+  }
+  .DbSquare {
+    grid-row: 7;
+    grid-column: 19;
+  }
+  .SgSquare {
+    grid-row: 7;
+    grid-column: 20;
+  }
+  .BhSquare {
+    grid-row: 7;
+    grid-column: 21;
+  }
+  .HsSquare {
+    grid-row: 7;
+    grid-column: 22;
+  }
+  .MtSquare {
+    grid-row: 7;
+    grid-column: 23;
+  }
+  .DsSquare {
+    grid-row: 7;
+    grid-column: 24;
+  }
+  .RgSquare {
+    grid-row: 7;
+    grid-column: 25;
+  }
+  .CnSquare {
+    grid-row: 7;
+    grid-column: 26;
+  }
+  .NhSquare {
+    grid-row: 7;
+    grid-column: 27;
+  }
+  .FlSquare {
+    grid-row: 7;
+    grid-column: 28;
+  }
+  .McSquare {
+    grid-row: 7;
+    grid-column: 29;
+  }
+  .LvSquare {
+    grid-row: 7;
+    grid-column: 30;
+  }
+  .TsSquare {
+    grid-row: 7;
+    grid-column: 31;
+  }
+  .OgSquare {
+    grid-row: 7;
+    grid-column: 32;
+  }
+
+
+
+  .energyStuff {
+      position: relative;
+      left: 120px;
+      z-index: 1;
+  }
+
+
+
+  .mainTabs {
+      position: relative;
+      top: -24px;
   }
