@@ -847,7 +847,7 @@ var game = {
 
 
     if(game.ru.id[5] == 0) 
-      document.getElementById('protonRowBonusText').style.visibility = "none";
+      document.getElementById('protonRowBonusText').style.visibility = "hidden";
     else
       document.getElementById('protonRowBonusText').style.visibility = "visible";
     if(game.ru.id[6] == 0) 
