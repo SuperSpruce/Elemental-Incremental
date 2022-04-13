@@ -41,17 +41,18 @@ var game = {
     H: 0,
     deu: 0,
     tritium: 0,
+    He: 0,
     Hpower: 1,
     totalMass: 0,
-
-    u1: false,
+    subatomicBoughtThisRun: new Array(4),
+    
     nu: {
-      num: 3,
-      id: new Array(3)
+      num: 4,
+      id: new Array(4)
     },
     ru: {
       num: 7,
-      id: new Array(7),
+      id: new Array(7)
     },
     iu: {
       num: 1,
@@ -59,12 +60,11 @@ var game = {
     },
 
     ach: {
-      num: 30,
+      num: 35,
       get: 0,
       power: 1,
-      id: new Array(30),
-      name: new Array(30),
-      desc: new Array(30)
+      id: new Array(35),
+      name: new Array(35)
     },
     unlockStage: 0,
     sigFigs: 4,
@@ -75,8 +75,10 @@ var game = {
   const MAX_VALUE = 1.79769312e308;
   var energyLastSecond = MAX_VALUE;
   var lastResetTime = 0;
-  const ruBaseCost = [10, 1, 1e8, [50, 5, 5e8], [500, 25, 1.6e9]];
-  
+  const ruBaseCost = [10, 1, 1e8, [50, 5, 5e8], [500, 25, 1.6e9], [300, 1e9], [20, 1e9]];
+  const periodicRows = [2, 10, 18, 36, 54, 86, 118, 168, 218, 290, 362, 460, 558, 686, 814, 976, 1138, 1338, 1538, 1780, 2022, 2310, 2598, 2936, 3274, 3666, 4058, 4508, 4958, 5470, 5982, 6560, 7138, 7786, 8434, 9156, 9878, 10678, 11478, 12360, 13242, 14210, 15178];
+  var HEffectExponent = [0.5, 0.5];
+
   
   
   
@@ -197,7 +199,6 @@ var game = {
     if(decays > 0) {
       game.neutron -= decays;
       game.neutronPower = game.neutron;
-      game.energy += (5e6 * decays);
       if(decays > 20) {
         //Will add this in later, needs normal distributions to work properly
       }
@@ -209,6 +210,10 @@ var game = {
             game.neutrino++;
             game.neutrinoPower = game.neutrino;
           }
+          if(game.nu.id[3]) {
+            game.energy += (game.neutronDecayEnergy + game.neutronInitCost / 2 * Math.pow(game.neutronCostMult, game.subatomicBoughtThisRun[3] - game.neutron - i));
+          }
+          else game.energy += game.neutronDecayEnergy;
         }
       }
       if(!game.ach[20]) {
@@ -217,9 +222,12 @@ var game = {
         checkAchievementCount();
       }
       updatePePower();
+      if(game.nu.id[3])
+        document.getElementById("neutronDecayEnD").innerHTML = format(game.neutronDecayEnergy + game.neutronInitCost / 2 * Math.pow(game.neutronCostMult, game.subatomicBoughtThisRun[3] - game.neutron), 0);
       document.getElementById("energyDisplay").innerHTML = format(game.energy, 0);
       document.getElementById("protonD").innerHTML = game.proton;
       document.getElementById("protonP").innerHTML = format(game.Hpower * game.protonPower * game.ach.power * 1000 / game.protonSpeed, 2);
+      document.getElementById("energyS").innerHTML = format(game.Hpower * game.protonPower * game.ach.power * 1000 / game.protonSpeed, 2);
       document.getElementById("neutronD").innerHTML = game.neutron;
       document.getElementById("neutronP").innerHTML = format(Math.pow(1 + game.neutronPower/2, 2), 2);
       document.getElementById("electronD").innerHTML = game.electron;
@@ -228,6 +236,25 @@ var game = {
       document.getElementById("neutrinoP").innerHTML = Math.round(1 + game.neutrinoPower);
       document.getElementById("clickD").innerHTML = format(game.Hpower * game.clickPower * game.ach.power, 2);
     }
+  }
+
+
+
+  function subatomicRowBonus(resource) {
+    let minLevel = 0;
+    let level = Math.ceil(periodicRows.length / 2);
+    let maxLevel = periodicRows.length;
+    while(resource >= periodicRows[level] || resource < periodicRows[level - 1]) {
+      if(resource >= periodicRows[level]) {
+        minLevel = level;
+        level = Math.ceil((minLevel + maxLevel) / 2);
+      }
+      else {
+        maxLevel = level;
+        level = Math.floor((minLevel + maxLevel) / 2);
+      }
+    }
+    return level;
   }
   
 
@@ -248,15 +275,19 @@ var game = {
     {
       game.energy -= Math.ceil(game.protonCost);
       game.proton++;
+      game.subatomicBoughtThisRun[0]++;
       game.totalMass += 1.0072765;
       updateProtonPower();
       game.protonCost *= game.protonCostMult;
       game.protonCost10 *= game.protonCostMult;
       game.protonCost100 *= game.protonCostMult;
+      updateElectronCosts();
       document.getElementById("protonC").innerHTML = format(game.protonCost, 0);
       document.getElementById("energyDisplay").innerHTML = format(game.energy, 0);
       document.getElementById("protonD").innerHTML = game.proton;
       document.getElementById("protonP").innerHTML = format(game.Hpower * game.protonPower * game.ach.power * 1000 / game.protonSpeed, 2);
+      document.getElementById("energyS").innerHTML = format(game.Hpower * game.protonPower * game.ach.power * 1000 / game.protonSpeed, 2);
+      document.getElementById("protonRowBonusNext").innerHTML = periodicRows[subatomicRowBonus(game.proton)];
     }
   }
   
@@ -298,14 +329,18 @@ var game = {
       checkAchievementCount()
     }
     game.proton += count;
+    game.subatomicBoughtThisRun[0] += count;
     game.totalMass += count * 1.0072765;
     updateProtonPower();
     game.protonCost10 = game.protonCost * (1 - Math.pow(game.protonCostMult, 10)) / (1 - game.protonCostMult);
     game.protonCost100 = game.protonCost * (1 - Math.pow(game.protonCostMult, 100)) / (1 - game.protonCostMult);
+    updateElectronCosts();
     document.getElementById("energyDisplay").innerHTML = format(game.energy, 0);
     document.getElementById("protonD").innerHTML = game.proton;
     document.getElementById("protonP").innerHTML = format(game.Hpower * game.protonPower * game.ach.power * 1000 / game.protonSpeed, 2);
+    document.getElementById("energyS").innerHTML = format(game.Hpower * game.protonPower * game.ach.power * 1000 / game.protonSpeed, 2);
     document.getElementById("protonC").innerHTML = format(game.protonCost, 0);
+    document.getElementById("protonRowBonusNext").innerHTML = periodicRows[subatomicRowBonus(game.proton)];
   }
   
   function updateProtonSpeed() {
@@ -316,17 +351,68 @@ var game = {
   }, game.protonSpeed); }
   
   function updateProtonPower() {
-    game.protonPower = game.proton * (1+game.neutrinoPower) * Math.pow(1 + game.neutronPower/2, 2);
+    game.protonPower = game.proton * (1+game.neutrinoPower) * Math.pow(1 + game.neutronPower/2, 2) * Math.pow((1 + game.ru.id[5] / 10), subatomicRowBonus(game.proton));
   }
   
   function updateElectronPower() {
-    game.electronPower = game.electron * (1+game.neutrinoPower) * Math.pow(1 + game.neutronPower/2, 2) * Math.pow(3, game.ru.id[4]);
+    game.electronPower = game.electron * (1+game.neutrinoPower) * Math.pow(1 + game.neutronPower/2, 2) * Math.pow(3, game.ru.id[4]) * Math.pow((1 + game.ru.id[6] / 10), subatomicRowBonus(game.electron));
     game.clickPower = (1 + game.neutrinoPower) * Math.pow(1 + game.neutronPower/2, 2) + game.electronPower;
   }
   
   function updatePePower() {
     updateProtonPower();
     updateElectronPower();
+  }
+
+
+  function updateProtonCosts() {
+    if(game.nu.id[1]) {
+      game.protonCost = game.protonInitCost * Math.pow(game.protonCostMult, game.subatomicBoughtThisRun[0]) / Math.pow(2, Math.pow(game.electron, 0.5));
+    }
+    else {
+      game.protonCost = game.protonInitCost * Math.pow(game.protonCostMult, game.subatomicBoughtThisRun[0]);
+    }
+      game.protonCost10 = game.protonCost * (1 - Math.pow(game.protonCostMult, 10)) / (1 - game.protonCostMult);
+      game.protonCost100 = game.protonCost * (1 - Math.pow(game.protonCostMult, 100)) / (1 - game.protonCostMult);
+      document.getElementById("protonC").innerHTML = format(game.protonCost, 0);
+  }
+
+  function updateElectronCosts() {
+    if(game.nu.id[1]) {
+      game.electronCost = game.electronInitCost * Math.pow(game.electronCostMult, game.subatomicBoughtThisRun[1]) / Math.pow(2, Math.pow(game.proton, 0.5));
+    }
+    else {
+      game.electronCost = game.electronInitCost * Math.pow(game.electronCostMult, game.subatomicBoughtThisRun[1]);
+    }
+      game.electronCost10 = game.electronCost * (1 - Math.pow(game.electronCostMult, 10)) / (1 - game.electronCostMult);
+      game.electronCost100 = game.electronCost * (1 - Math.pow(game.electronCostMult, 100)) / (1 - game.electronCostMult);
+      document.getElementById("electronC").innerHTML = format(game.electronCost, 0);
+  }
+
+  function updateNeutrinoCosts() {
+    game.neutrinoCost = game.neutrinoInitCost * Math.pow(game.neutrinoCostMult, game.subatomicBoughtThisRun[2]);
+    game.neutrinoCost10 = game.neutrinoCost * (1 - Math.pow(game.neutrinoCostMult, 10)) / (1 - game.neutrinoCostMult);
+    game.neutrinoCost100 = game.neutrinoCost * (1 - Math.pow(game.neutrinoCostMult, 100)) / (1 - game.neutrinoCostMult);
+    document.getElementById("neutrinoC").innerHTML = format(game.neutrinoCost, 0);
+  }
+
+  function updateNeutronCosts() {
+    game.neutronCost = game.neutronInitCost * Math.pow(game.neutronCostMult, game.subatomicBoughtThisRun[3]);
+    game.neutronCost10 = game.neutronCost * (1 - Math.pow(game.neutronCostMult, 10)) / (1 - game.neutronCostMult);
+    game.neutronCost100 = game.neutronCost * (1 - Math.pow(game.neutronCostMult, 100)) / (1 - game.neutronCostMult);
+    document.getElementById("neutrinoC").innerHTML = format(game.neutrinoCost, 0);
+  }
+
+
+  function updatePeCosts() {
+    updateProtonCosts();
+    updateElectronCosts();
+  }
+
+  function updateSubatomicCosts() {
+    updatePeCosts();
+    updateNeutrinoCosts();
+    updateNeutronCosts();
   }
 
 
@@ -343,15 +429,18 @@ var game = {
     {
       game.energy -= Math.ceil(game.electronCost);
       game.electron++;
+      game.subatomicBoughtThisRun[1]++;
       game.totalMass += 0.0005858;
       updateElectronPower();
       game.electronCost *= game.electronCostMult;
       game.electronCost10 *= game.electronCostMult;
       game.electronCost100 *= game.electronCostMult;
+      updateProtonCosts();
       document.getElementById("electronC").innerHTML = format(game.electronCost, 0);
       document.getElementById("energyDisplay").innerHTML = format(game.energy, 0);
       document.getElementById("electronD").innerHTML = game.electron;
       document.getElementById("electronP").innerHTML = format(game.Hpower * game.electronPower * game.ach.power, 2);
+      document.getElementById("electronRowBonusNext").innerHTML = periodicRows[subatomicRowBonus(game.electron)];
       document.getElementById("clickD").innerHTML = format(game.Hpower * game.clickPower * game.ach.power, 2);
     }
   }
@@ -387,22 +476,25 @@ var game = {
         count++;
       }
     }
+  }
     if(count >= 40 && !game.ach.id[26]) {
       game.ach.id[26] = true; 
       updateAchievementColors();
       checkAchievementCount()
     }
     game.electron += count;
+    game.subatomicBoughtThisRun[1] += count;
     game.totalMass += count * 0.0005858;
     updateElectronPower();
     game.electronCost10 = game.electronCost * (1 - Math.pow(game.electronCostMult, 10)) / (1 - game.electronCostMult);
     game.electronCost100 = game.electronCost * (1 - Math.pow(game.electronCostMult, 100)) / (1 - game.electronCostMult);
+    updateProtonCosts();
     document.getElementById("electronC").innerHTML = format(game.electronCost, 0);
     document.getElementById("energyDisplay").innerHTML = format(game.energy, 0);
     document.getElementById("electronD").innerHTML = game.electron;
     document.getElementById("electronP").innerHTML = format(game.Hpower * game.electronPower * game.ach.power, 2);
+    document.getElementById("electronRowBonusNext").innerHTML = periodicRows[subatomicRowBonus(game.electron)];
     document.getElementById("clickD").innerHTML = format(game.Hpower * game.clickPower * game.ach.power, 2);
-    }
   }
   
   
@@ -412,6 +504,7 @@ var game = {
     {
       game.energy -= Math.ceil(game.neutrinoCost);
       game.neutrino++;
+      game.subatomicBoughtThisRun[2]++;
       game.neutrinoPower = game.neutrino;
       updatePePower();
       game.neutrinoCost *= game.neutrinoCostMult;
@@ -424,6 +517,7 @@ var game = {
       document.getElementById("clickD").innerHTML = format(game.Hpower * game.clickPower * game.ach.power, 2);
       document.getElementById("electronP").innerHTML = format(game.Hpower * game.electronPower * game.ach.power, 2);
       document.getElementById("protonP").innerHTML = format(game.Hpower * game.protonPower * game.ach.power * 1000 / game.protonSpeed, 2);
+      document.getElementById("energyS").innerHTML = format(game.Hpower * game.protonPower * game.ach.power * 1000 / game.protonSpeed, 2);
     }
   }
   
@@ -458,12 +552,14 @@ var game = {
         count++;
       }
     }
+  }
     if(count >= 40 && !game.ach.id[26]) {
       game.ach.id[26] = true; 
       updateAchievementColors();
       checkAchievementCount()
     }
     game.neutrino += count;
+    game.subatomicBoughtThisRun[2] += count;
     game.neutrinoPower = game.neutrino;
     updatePePower();
     game.neutrinoCost10 = game.neutrinoCost * (1 - Math.pow(game.neutrinoCostMult, 10)) / (1 - game.neutrinoCostMult);
@@ -475,7 +571,7 @@ var game = {
     document.getElementById("clickD").innerHTML = format(game.Hpower * game.clickPower * game.ach.power, 2);
     document.getElementById("electronP").innerHTML = format(game.Hpower * game.electronPower * game.ach.power, 2);
     document.getElementById("protonP").innerHTML = format(game.Hpower * game.protonPower * game.ach.power * 1000 / game.protonSpeed, 2);
-    }
+    document.getElementById("energyS").innerHTML = format(game.Hpower * game.protonPower * game.ach.power * 1000 / game.protonSpeed, 2);
   }
 
 
@@ -483,6 +579,7 @@ var game = {
   function makeNeutron() {
     if(game.energy >= game.neutronCost && game.proton >= 1 && game.electron >= 1 && game.neutrino >= 1) {
       game.neutron++;
+      game.subatomicBoughtThisRun[3]++;
       game.neutronPower = game.neutron;
       game.energy -= game.neutronCost;
       game.proton--;
@@ -491,17 +588,21 @@ var game = {
       game.neutronCost *= game.neutronCostMult;
       game.neutronCost10 *= game.neutronCostMult;
       game.neutronCost100 *= game.neutronCostMult;
+      updatePeCosts();
       game.neutrinoPower = game.neutrino;
-      game.totalMass += 1.0086649;
+      updateMass();
       updatePePower();
       document.getElementById("energyDisplay").innerHTML = format(game.energy, 0);
       document.getElementById("protonD").innerHTML = game.proton;
       document.getElementById("protonP").innerHTML = format(game.Hpower * game.protonPower * game.ach.power * 1000 / game.protonSpeed, 2);
+      document.getElementById("energyS").innerHTML = format(game.Hpower * game.protonPower * game.ach.power * 1000 / game.protonSpeed, 2);
+      document.getElementById("protonRowBonusNext").innerHTML = periodicRows[subatomicRowBonus(game.proton)];
       document.getElementById("neutronD").innerHTML = game.neutron;
       document.getElementById("neutronP").innerHTML = format(Math.pow(1 + game.neutronPower/2, 2), 2);
       document.getElementById("neutronC").innerHTML = format(game.neutronCost, 0);
       document.getElementById("electronD").innerHTML = game.electron;
       document.getElementById("electronP").innerHTML = format(game.Hpower * game.electronPower * game.ach.power, 2);
+      document.getElementById("electronRowBonusNext").innerHTML = periodicRows[subatomicRowBonus(game.electron)];
       document.getElementById("neutrinoD").innerHTML = game.neutrino;
       document.getElementById("neutrinoP").innerHTML = Math.round(1 + game.neutrinoPower);
       document.getElementById("clickD").innerHTML = format(game.Hpower * game.clickPower * game.ach.power, 2);
@@ -557,20 +658,25 @@ var game = {
       checkAchievementCount()
     }
     game.neutron += count;
+    game.subatomicBoughtThisRun[3] += count;
     game.neutrinoPower = game.neutrino;
     game.neutronPower = game.neutron;
     updateMass();
     updatePePower();
     game.neutronCost10 = game.neutronCost * (1 - Math.pow(game.neutronCostMult, 10)) / (1 - game.neutronCostMult);
     game.neutronCost100 = game.neutronCost * (1 - Math.pow(game.neutronCostMult, 100)) / (1 - game.neutronCostMult);
+    updatePeCosts();
     document.getElementById("energyDisplay").innerHTML = format(game.energy, 0);
     document.getElementById("protonD").innerHTML = game.proton;
     document.getElementById("protonP").innerHTML = format(game.Hpower * game.protonPower * game.ach.power * 1000 / game.protonSpeed, 2);
+    document.getElementById("energyS").innerHTML = format(game.Hpower * game.protonPower * game.ach.power * 1000 / game.protonSpeed, 2);
+    document.getElementById("protonRowBonusNext").innerHTML = periodicRows[subatomicRowBonus(game.proton)];
     document.getElementById("neutronD").innerHTML = game.neutron;
     document.getElementById("neutronP").innerHTML = format(Math.pow(1 + game.neutronPower/2, 2), 2);
     document.getElementById("neutronC").innerHTML = format(game.neutronCost, 0);
     document.getElementById("electronD").innerHTML = game.electron;
     document.getElementById("electronP").innerHTML = format(game.Hpower * game.electronPower * game.ach.power, 2);
+    document.getElementById("electronRowBonusNext").innerHTML = periodicRows[subatomicRowBonus(game.electron)];
     document.getElementById("neutrinoD").innerHTML = game.neutrino;
     document.getElementById("neutrinoP").innerHTML = Math.round(1 + game.neutrinoPower);
     document.getElementById("clickD").innerHTML = format(game.Hpower * game.clickPower * game.ach.power, 2);
@@ -581,6 +687,24 @@ var game = {
   
   
   
+  function updateHPower() {
+    let protiumExponentBoost = 0; //Helium will affect this later
+    let deuteriumExponentBoost = 0; //ditto
+    if(game.nu.id[2]) {
+      protiumExponentBoost += Math.log10(1 + game.deu) / 100;
+      deuteriumExponentBoost += Math.log10(1 + game.H) / 100;
+    }
+    HEffectExponent[0] = 0.5 + protiumExponentBoost;
+    HEffectExponent[1] = 0.5 + deuteriumExponentBoost;
+    game.Hpower = Math.pow(game.H + 1, HEffectExponent[0]) * Math.pow(game.deu + 1, HEffectExponent[1]);
+    document.getElementById("HpP").innerHTML = format(game.Hpower, 2);
+    if(HEffectExponent[0] != 0.5)
+      document.getElementById("H1EffectExponentD").innerHTML = format(HEffectExponent[0], 4);
+    if(HEffectExponent[1] != 0.5)
+      document.getElementById("H2EffectExponentD").innerHTML = format(HEffectExponent[1], 4);
+  }
+
+
   
   function p1(mass) //not the McLaren P1, this is a :ripaarex:
   {
@@ -589,20 +713,26 @@ var game = {
       updateAchievementColors();
       checkAchievementCount();
     }
+    if(Date.now() - lastResetTime <= 5000 && Math.min(game.proton, game.electron, game.neutron) >= 1 && !game.ach.id[31]) {
+      game.ach.id[31] = true; 
+      updateAchievementColors();
+      checkAchievementCount();
+    }
     lastResetTime = Date.now();
+    game.subatomicBoughtThisRun = [0,0,0,0];
 
     if(mass == 1) {
       game.H += Math.min(game.proton, game.electron);
       document.getElementById("H1D").innerHTML = game.H;
-      document.getElementById("H1P").innerHTML = format(Math.sqrt(game.H + 1), 2);
+      document.getElementById("H1P").innerHTML = format(Math.pow(game.H + 1, HEffectExponent[0]), 2);
       }
     else if(mass == 2) {
       game.deu += Math.min(game.proton, game.neutron, game.electron);
       document.getElementById("H2D").innerHTML = game.deu;
-      document.getElementById("H2P").innerHTML = format(Math.sqrt(game.deu + 1), 2);
+      document.getElementById("H2P").innerHTML = format(Math.pow(game.deu + 1, HEffectExponent[1]), 2);
     }
 
-    game.Hpower = Math.sqrt(game.H + 1) * Math.sqrt(game.deu + 1);
+    updateHPower();
     game.energy = 0;
     game.clickPower = 1;
     game.proton = 0;
@@ -629,17 +759,23 @@ var game = {
     document.getElementById("energyDisplay").innerHTML = format(game.energy, 0);
     document.getElementById("protonD").innerHTML = game.proton;
     document.getElementById("protonP").innerHTML = format(game.Hpower * game.protonPower * game.ach.power * 1000 / game.protonSpeed, 2);
+    document.getElementById("energyS").innerHTML = format(game.Hpower * game.protonPower * game.ach.power * 1000 / game.protonSpeed, 2);
     document.getElementById("protonC").innerHTML = format(game.protonCost, 0);
+    document.getElementById("protonRowBonusNext").innerHTML = periodicRows[subatomicRowBonus(game.proton)];
     document.getElementById("neutronC").innerHTML = format(game.neutronCost, 0);
     document.getElementById("neutronD").innerHTML = game.neutron;
     document.getElementById("neutronP").innerHTML = format(Math.pow(1 + game.neutronPower/2, 2), 2);
     document.getElementById("electronD").innerHTML = game.electron;
     document.getElementById("electronP").innerHTML = format(game.Hpower * game.electronPower * game.ach.power, 2);
     document.getElementById("electronC").innerHTML = format(game.electronCost, 0);
+    document.getElementById("electronRowBonusNext").innerHTML = periodicRows[subatomicRowBonus(game.electron)];
     document.getElementById("neutrinoC").innerHTML = format(game.neutrinoCost, 0);
     document.getElementById("neutrinoD").innerHTML = game.neutrino;
     document.getElementById("clickD").innerHTML = format(game.Hpower * game.clickPower * game.ach.power, 2);
-    document.getElementById("HpP").innerHTML = format(game.Hpower, 2);
+    if(game.nu.id[3])
+        document.getElementById("neutronDecayEnD").innerHTML = format(game.neutronDecayEnergy + game.neutronInitCost / 2 * Math.pow(game.neutronCostMult, game.subatomicBoughtThisRun[3] - game.neutron), 0);
+    else
+        document.getElementById("neutronDecayEnD").innerHTML = format(game.neutronDecayEnergy, 0);
   }
   
   
@@ -708,6 +844,16 @@ var game = {
         document.getElementById('upgradeTable1').style.visibility = "visible";
         break;
     }
+
+
+    if(game.ru.id[5] == 0) 
+      document.getElementById('protonRowBonusText').style.visibility = "none";
+    else
+      document.getElementById('protonRowBonusText').style.visibility = "visible";
+    if(game.ru.id[6] == 0) 
+      document.getElementById('electronRowBonusText').style.visibility = "hidden";
+    else
+      document.getElementById('electronRowBonusText').style.visibility = "visible";
   }
   
   
@@ -801,6 +947,11 @@ var game = {
       updateAchievementColors();
       checkAchievementCount();
     }
+    if(game.proton >= 118 && game.electron >= 118 && !game.ach.id[34]) {
+      game.ach.id[34] = true; 
+      updateAchievementColors();
+      checkAchievementCount();
+    }
     if(game.proton == 0 && game.electron >= 30 && !game.ach.id[10]) {
       game.ach.id[10] = true; 
       updateAchievementColors();
@@ -849,6 +1000,16 @@ var game = {
     }
     if(game.totalEnergy >= 1e9 && !game.ach.id[25]) {
       game.ach.id[25] = true;
+      updateAchievementColors();
+      checkAchievementCount();
+    }
+    if(game.totalEnergy >= 1e10 && !game.ach.id[30]) {
+      game.ach.id[30] = true;
+      updateAchievementColors();
+      checkAchievementCount();
+    }
+    if(game.totalEnergy >= 1.331e11 && !game.ach.id[32]) {
+      game.ach.id[32] = true;
       updateAchievementColors();
       checkAchievementCount();
     }
@@ -904,18 +1065,39 @@ var game = {
       updateAchievementColors();
       checkAchievementCount();
     }
+    if(game.energy - energyLastSecond >= 2e10 && !game.ach.id[33]) {
+      game.ach.id[33] = true; 
+      updateAchievementColors();
+      checkAchievementCount();
+    }
     
     energyLastSecond = game.energy;
   }
   
   function checkAchievementCount() {
     let n = 0;
-    for(let i = 0; i < game.ach.num; i++)
-      if(game.ach.id[i]) n++;
+    let perAchBonus = 5;
+    let rows = 0;
+    let rowCheck = 0;
+    for(let i = 0; i < game.ach.num; i++) {
+      if(game.ach.id[i]) {
+        n++;
+        rowCheck++;
+      }
+      if(game.nu.id[0] && i % 10 == 9) {
+        if(rowCheck == 10) {
+          rows++;
+        }
+        rowCheck = 0;
+      }
+    }
+    perAchBonus = 5 + rows;
     game.ach.get = n;
-    game.ach.power = Math.pow(1.05, n);
+    game.ach.power = Math.pow(1 + perAchBonus / 100, n);
+    document.getElementById("perAchBonus").innerHTML = format(perAchBonus, 0);
     document.getElementById("achBonusD").innerHTML = format(game.ach.power, 2);
     document.getElementById("protonP").innerHTML = format(game.Hpower * game.protonPower * game.ach.power * 1000 / game.protonSpeed, 2);
+    document.getElementById("energyS").innerHTML = format(game.Hpower * game.protonPower * game.ach.power * 1000 / game.protonSpeed, 2);
     document.getElementById("electronP").innerHTML = format(game.Hpower * game.electronPower * game.ach.power, 2);
     document.getElementById("clickD").innerHTML = format(game.Hpower * game.clickPower * game.ach.power, 2);
   }
@@ -933,14 +1115,20 @@ var game = {
 
 
   function updateEverything() {
+    updateHPower();
+    updateSubatomicCosts();
     checkAchievementCount();
     updateMass();
     updatePePower();
     document.getElementById("energyDisplay").innerHTML = format(game.energy, 0);
     document.getElementById("totalEnergyD").innerHTML = format(game.totalEnergy, 0);
+    document.getElementById("totalEnergyPerspective").innerHTML = format(game.totalEnergy * 7.5153825e-12, 3);
     document.getElementById("protonD").innerHTML = game.proton;
     document.getElementById("protonP").innerHTML = format(game.Hpower * game.protonPower * game.ach.power * 1000 / game.protonSpeed, 2);
+    document.getElementById("energyS").innerHTML = format(game.Hpower * game.protonPower * game.ach.power * 1000 / game.protonSpeed, 2);
     document.getElementById("protonC").innerHTML = format(game.protonCost, 0);
+    document.getElementById("protonRowBonusEffectiveness").innerHTML = format(1 + game.ru.id[5] / 10, 1);
+    document.getElementById("protonRowBonusNext").innerHTML = periodicRows[subatomicRowBonus(game.proton)];
     document.getElementById("neutronD").innerHTML = game.neutron;
     document.getElementById("neutronP").innerHTML = format(Math.pow(1 + game.neutronPower/2, 2), 2);
     document.getElementById("neutronC").innerHTML = format(game.neutronCost, 0);
@@ -952,6 +1140,8 @@ var game = {
     document.getElementById("electronD").innerHTML = game.electron;
     document.getElementById("electronP").innerHTML = format(game.Hpower * game.electronPower * game.ach.power, 2);
     document.getElementById("electronC").innerHTML = format(game.electronCost, 0);
+    document.getElementById("electronRowBonusEffectiveness").innerHTML = format(1 + game.ru.id[6] / 10, 1);
+    document.getElementById("electronRowBonusNext").innerHTML = periodicRows[subatomicRowBonus(game.electron)];
     document.getElementById("neutrinoC").innerHTML = format(game.neutrinoCost, 0);
     document.getElementById("neutrinoD").innerHTML = game.neutrino;
     document.getElementById("neutrinoP").innerHTML = Math.round(1 + game.neutrino);
@@ -966,14 +1156,28 @@ var game = {
     document.getElementById("ru4CostProtium").innerHTML = format(ruBaseCost[3][0] * Math.pow(1.25, game.ru.id[3]), 0);
     document.getElementById("ru4CostDeuterium").innerHTML = format(ruBaseCost[3][1] * Math.pow(1.25, game.ru.id[3]), 0);
     document.getElementById("ru4CostEnergy").innerHTML = format(ruBaseCost[3][2] * Math.pow(1.5, game.ru.id[3]), 0);
+    document.getElementById("ru5Level").innerHTML = game.ru.id[4];
+    document.getElementById("ru6Level").innerHTML = game.ru.id[5];
+    document.getElementById("ru6CostProtium").innerHTML = format(ruBaseCost[5][0] * Math.pow(1.97, game.ru.id[5]), 0);
+    document.getElementById("ru6CostEnergy").innerHTML = format(ruBaseCost[5][1] * Math.pow(32, game.ru.id[5]), 0);
+    document.getElementById("ru7Level").innerHTML = game.ru.id[6];
+    document.getElementById("ru7CostDeuterium").innerHTML = format(ruBaseCost[6][0] * Math.pow(2, game.ru.id[6]), 0);
+    document.getElementById("ru7CostEnergy").innerHTML = format(ruBaseCost[6][1] * Math.pow(32, game.ru.id[6]), 0);
+    document.getElementById("nu2EffectProton").innerHTML = format(Math.pow(2, Math.pow(game.electron, 0.5)), 2);
+    document.getElementById("nu2EffectElectron").innerHTML = format(Math.pow(2, Math.pow(game.proton, 0.5)), 2);
+    document.getElementById("nu3EffectProtium").innerHTML = format(Math.log10(1 + game.deu) / 100, 4);
+    document.getElementById("nu3EffectDeuterium").innerHTML = format(Math.log10(1 + game.H) / 100, 4);
     document.getElementById("H1D").innerHTML = game.H;
-    document.getElementById("H1P").innerHTML = format(Math.sqrt(game.H + 1), 2);
+    document.getElementById("H1P").innerHTML = format(Math.pow(game.H + 1, HEffectExponent[0]), 2);
     document.getElementById("H2D").innerHTML = game.deu;
-    document.getElementById("H2P").innerHTML = format(Math.sqrt(game.deu + 1), 2);
-    document.getElementById("HpP").innerHTML = format(game.Hpower, 2);
+    document.getElementById("H2P").innerHTML = format(Math.pow(game.deu + 1, HEffectExponent[1]), 2);
     document.getElementById("sigFigD").innerHTML = game.sigFigs;
     document.getElementById("minPowerForSciD").innerHTML = game.minPowerForSci;
     document.getElementById("minPowerForSciD2").innerHTML = game.minPowerForSci;
+    if(game.nu.id[3])
+        document.getElementById("neutronDecayEnD").innerHTML = format(game.neutronDecayEnergy + game.neutronInitCost / 2 * Math.pow(game.neutronCostMult, game.subatomicBoughtThisRun[3] - game.neutron), 0);
+    else
+        document.getElementById("neutronDecayEnD").innerHTML = format(game.neutronDecayEnergy, 0);
     hideAndShow();
     updateAchievementColors();
 }
@@ -1020,11 +1224,19 @@ var game = {
     if(!game.H) game.H = 0;
     if(!game.deu) game.deu = 0;
     if(!game.tritium) game.tritium = 0;
+    if(!game.He) game.He = 0;
     if(!game.Hpower) game.Hpower = 1;
     if(!game.clickPower) game.clickPower = 1;
     if(!game.clickStat) game.clickStat = 0;
     if(!game.protonSpeed) game.protonSpeed = 1000;
-    if(!game.u1) game.u1 = false;
+    
+    if(!game.subatomicBoughtThisRun) {
+      game.subatomicBoughtThisRun = new Array(4);
+      p1(1);
+      for(let i = 0; i < 4; i++) {
+        game.subatomicBoughtThisRun[i] = 0;
+      }
+    }
 
     if(!game.iu) {
       game.iu = {
@@ -1072,19 +1284,42 @@ var game = {
         game.ru.id[i] = 0;
     }
 
+    if(!game.nu) {
+      game.nu = {
+        num: 4,
+        id: new Array(4)
+      }
+    }
+    if(!game.nu.num || game.nu.num != 4) game.nu.num = 4;
+    if(!game.nu.id) {
+      game.nu.id = new Array(game.nu.num);
+      for(let i = 0; i < game.nu.num; i++)
+        game.nu.id[i] = false;
+    }
+    if(game.nu.id.length != game.nu.num) {
+      let a = game.nu.id;
+      game.nu.id = new Array(game.nu.num);
+      for(let i = 0; i < Math.min(a.length, game.nu.num); i++) 
+        game.nu.id[i] = a[i];
+    }
+    for(let i = 0; i < game.nu.num; i++) {
+      if(!game.nu.id[i] || game.nu.id[i] == 0)
+        game.nu.id[i] = false;
+    }
+
     if(!game.totalMass) game.totalMass = 0;
     if(!game.unlockStage) game.unlockStage = 0;
     if(!game.sigFigs) game.sigFigs = 4;
     if(!game.minPowerForSci) game.minPowerForSci = 6;
     if(!game.ach) {
       game.ach = {
-        num: 30,
+        num: 35,
         get: 0,
         power: 1,
-        id: new Array(30)
+        id: new Array(35)
       }
     }
-    if(!game.ach.num || game.ach.num != 30) game.ach.num = 30;
+    if(!game.ach.num || game.ach.num != 35) game.ach.num = 35;
     if(!game.ach.id || game.ach.id[0] == "null") {
       game.ach.id = new Array(game.ach.num);
       for(let i = 0; i < game.ach.num; i++)
@@ -1097,7 +1332,14 @@ var game = {
         game.ach.id[i] = a[i];
     }
   }
-  
+
+
+
+
+  function hardResetClick() {
+    let confirmation = confirm("WARNING: BY CLICKING 'OK', YOU HARD RESET THE GAME. YOUR PREVIOUS SAVE DATA CANNOT BE RECOVERED. DO YOU WANT TO DO THIS??");
+    if(confirmation) hardReset();
+  }
   
   function hardReset() {
     clearInterval(game.protonInterval);
@@ -1145,15 +1387,18 @@ var game = {
     game.clickPower = 1;
     game.clickStat = 0;
     game.protonSpeed = 1000;
-    game.u1 = false;
+    game.subatomicBoughtThisRun = [0,0,0,0];
     game.totalMass = 0;
     game.ru.num = 7;
     for(let i = 0; i < game.ru.num; i++)
       game.ru.id[i] = 0;
     game.iu.num = 1;
-    for(let i = 0; i < game.ru.num; i++)
+    for(let i = 0; i < game.iu.num; i++)
       game.iu.id[i] = 0;
-    game.ach.num = 30;
+    game.nu.num = 4;
+    for(let i = 0; i < game.nu.num; i++)
+      game.nu.id[i] = false;
+    game.ach.num = 35;
     for(let i = 0; i < game.ach.num; i++)
       game.ach.id[i] = false;
     game.ach.get = 0;
@@ -1183,4 +1428,3 @@ var game = {
     if(tab.startsWith("tabM.")) 
       document.getElementById("tabM").style.display = "inline-block";
   }
-  // go to a tab for the first time, so not all show
