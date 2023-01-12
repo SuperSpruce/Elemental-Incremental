@@ -10,8 +10,10 @@
     <link rel="stylesheet" href="./graphics.css">
     
     <!-- import the webpage's javascript file -->
+    <script src="./Gas.js" defer></script>
     <script src="./game.js" defer></script>
     <!--<script src="./achievements.js" defer></script> -->
+    <script src="./gases.js" defer></script>
     <script src="./upgrades.js" defer></script>
   </head>  
   <body>
@@ -22,6 +24,7 @@
 			<button class="Btab2" onclick="tab('tab1')">Subatomic Particles</button>
 			<button class="Btab3" onclick="tab('tab2')">Atoms</button>
       <button class="Btab4" id="unlock1" visibility="hidden" onclick="tab('tabU1')">Upgrades</button>
+      <button class="Btab5" id="unlock3" visibility="hidden" onclick="tab('tab3')">Gas Containers</button>
 		</div><br>
     
     
@@ -79,7 +82,8 @@
           Make as many neutrinos as you can make with your energy!
         </button><br>
           You have <span id = "neutrinoD">0</span> neutrinos.<br>
-          They are boosting the production of energy from all sources by <span id = "neutrinoP">1</span>x.
+          They are boosting the production of energy from all sources by 
+          <span id = "neutrinoP0">1</span><clause id="neutrinoGasBonusText">^<span id="neutrinoGasBonusD">1.000</span> = <span id="neutrinoP">1.0</span></clause>x.
       </co></subdiv><br><br>
        
       <subdiv id="tab1c">
@@ -96,7 +100,8 @@
           Make as many neutrons as you can make!
         </button><br>
           You have <span id = "neutronD">0</span> neutrons.<br>
-          They are boosting the production of energy from all sources by <span id = "neutronP">1</span>x.<br>
+          They are boosting the production of energy from all sources by 
+          <span id = "neutronP0">1</span><clause id="neutronGasBonusText">^<span id="neutronGasBonusD">2.000</span> = <span id = "neutronP">1.0</span></clause>x.<br>
           They decay into <span id="neutronDecayEnD">5,000,000</span> energy with a half-life of <span id="neutronHLD">If you are seeing this, then the game is bugged</span>.<br>
           Upon decay, there is a <span id="neutronDecayPD">lol</span>% chance to make a proton, a <span id="neutronDecayElD">XD</span>% chance to make an electron, and a <span id="neutronDecayND">???</span>% chance to make a neutrino.
       </co></subdiv>
@@ -254,7 +259,68 @@
     
     
     <div id="tab3">
-      
+      <br><br>
+      <button class="BgasC1U" id="gasC1U" onclick="w4b()">
+        Buy the first gas container!
+        <br><br>Cost: 1e8 energy
+      </button>
+      <div id="tab3main">
+        <div id="tab3s">
+          <button id="Btab3.0" class = "mBtab1" onclick="tab('tab3.0')">?</button>
+          <button id="Btab3.1" class = "mBtab1" onclick="tab('tab3.1')">Gas container 1</button>
+          <br><br><br>
+        </div>
+        <div id="tab3.0">
+          Multiple gases can be added to gas containers. All gases start at their boiling point in terms of temperature.
+          <br><br>The temperature you see is the average temperature of all gas molecules in the container.
+          <br><br>Using the ideal gas law, PV = nRT, both increasing the number of molecules and increasing the temperature increases the pressure and/or volume of the container.
+          <br><br>The sides of the container expand when the pressure gets high enough, increasing the volume of the container. (Yes, this is a softcap.)
+          <br><br>Due to heating inefficiencies, it takes more energy to heat up the gases by one unit when the gases are already hot. (Yes, this is a kind of scaling.)
+          <br><br>Heat is conducted out of the container at a rate proportional to the temperature; therefore, temperature decays exponentially.
+          <br><br>Gases in the container cannot completely liquefy, so the minimum temperature of the container is the melting point of the gas with the lowest melting point.
+          <br><br>
+          <br>Effects:
+          <br>Pressure raises the exponent of the neutron effect.
+          <br>Temperature raises the exponent of the neutrino effect.
+          <br><br>
+          <br>COMING SOON in v2.0: 
+          <br>Injecting neutrons into the gas container at a high enough pressure will cause a great explosion, creating Helium but decimating everything else.
+          <br>This is the 2nd prestige layer of Elemental Incremental. Stay tuned!
+        </div>
+        <div id="tab3.1">
+          <tables class="gasContainerTable">
+            <side class="gasContainerLeftSide">
+              <span id="c1g1D">bug</span>
+              <span id="c1g2D">bug</span>
+              <br>Pressure: <span id="c1PD">0</span>
+              <br>Temperature: <span id="c1TD">0</span>
+              <br>Volume: <span id="c1VD">1.0</span>
+            </side>
+            <side class="gasContainerRightSide">
+              Select the molecule to add to the gas container: 
+              <select>
+                <option name="H2">H2</option>
+              </select>
+              Requires 2 Hydrogen atoms and 2e8 energy per H2 molecule
+              <br><br><br>
+              Select how many gas molecules you want to make (amount or proportion of total possible molecules that can be made):
+              <select id="C1InputType" onchange="changeInputType(1)">
+                <option name="proportion">proportion</option>
+                <option name="amount">amount</option>
+              </select>
+              <br>
+                <input type="number" id="C1InputTextBox">
+                <button onclick="changeInputNum(1,1)">Add gases</button>
+              <br><br>
+                Select the proportion of energy you want to spend to heat this container up.
+                <br><input type="number" id="C1HeatTextBox">
+                <button onclick="changeInputNum(1,2)">Add heat</button>
+              <br><br><br><br>
+              <button onclick="flushC1()">Flush this container to let the gases escape</button>
+            </side>
+          </tables>
+        </div>
+      </div>
     </div>
     
     
@@ -262,7 +328,7 @@
       <tables class="upgradeTable1" id="upgradeTable1">
         <upgrade class="ruSlot" id="ru1">
           <upgrade class="ruSlotText">
-            Decrease the cost scaling of protons by 1%.<br><br>
+            Decrease the cost scaling of protons by 3%.<br><br>
             Cost: <span id="ru1Cost">10 anti</span> Protium.<br>
             Level <span id="ru1Level">bug</span><br>
           </upgrade>
@@ -275,7 +341,7 @@
         </upgrade>
         <upgrade class="ruSlot" id="ru2">
           <upgrade class="ruSlotText">
-            Decrease the cost scaling of electrons by 1%.<br><br>
+            Decrease the cost scaling of electrons by 3%.<br><br>
             Cost: <span id="ru2Cost">1 anti</span> Deuterium.<br>
             Level <span id="ru2Level">bug</span><br>
           </upgrade>
@@ -289,7 +355,7 @@
 
         <upgrade class="ruSlot" id="ru3">
           <upgrade class="ruSlotText">
-            Decrease the cost scaling of neutrinos by 2%.<br><br>
+            Decrease the cost scaling of neutrinos by 4%.<br><br>
             Cost: <span id="ru3Cost">1e7 anti</span> energy.<br>
             Level <span id="ru3Level">bug</span><br>
           </upgrade>
@@ -303,7 +369,7 @@
 
         <upgrade class="ruSlot" id="ru4">
           <upgrade class="ruSlotText">
-            Decrease the cost scaling of neutrons by 2%.<br><br>
+            Decrease the cost scaling of neutrons by 4%.<br><br>
             Cost: <span id="ru4CostProtium">50</span> Protium, <span id="ru4CostDeuterium">5</span> Deuterium, and <span id="ru4CostEnergy">5e8</span> energy.<br>
             Level <span id="ru4Level">bug</span><br>
           </upgrade>
@@ -359,7 +425,7 @@
         </button>
 
         <button id="nu2" class="UCannotAfford" onclick="nu2Buy()">
-          Protons and Electrons make each other cheaper. (Divides cost by 2^other^(1/2))<br>
+          Protons and Electrons make each other cheaper. (Divides cost by 2^other^(1/3))<br>
           <br>Protons <span id="nu2TextProton">would be</span> <span id="nu2EffectProton">1</span>x cheaper.
           <br>Electrons <span id="nu2TextElectron">would be</span> <span id="nu2EffectElectron">1</span>x cheaper.
           <br><br>Cost: 750 Protium, 50 Deuterium, 1e13 energy.
@@ -385,17 +451,26 @@
       <button onclick = "exportSave()">Export save</button>
 		<br><br><br>
       Numbers equal to or greater than 1e<span id="minPowerForSciD">6</span> will be displayed using <span id="sigFigD">4</span> significant figures.  
-      <button onclick="changeSigFigs(-1)">-</button>
-      <button onclick="changeSigFigs(1)">+</button><br>
+      <button onclick="changeSigFigs(-1, 0)">-</button>
+      <button onclick="changeSigFigs(1, 0)">+</button>
+        <form>  
+          Number of sig figs:  
+          <input type="number" id="sigFigInput1">
+          <button type="button" onclick="sigFigTextBox()">Apply</button>
+          </form><br>
       The minimum number required to display notation as scientific is 1e<span id="minPowerForSciD2">6</span>.
       <button onclick="changeMinPowerForSci(-1)">-</button>
       <button onclick="changeMinPowerForSci(1)">+</button>
+      <br><br><br>
+        Toggle hotkeys: <button id="hotkeyToggle" onclick="toggleHotkeys()">Hotkeys are <span id="hotkeyToggleD">bugged</span></button>
+        <br>H = Perform a Protium reset
+        <br><span id="DhotkeyD">D = Perform a Deuterium reset</span>
       <br><br><br><br>
 		        Hard Reset (NOTICE: When clicking this button, there will be a confirmation.) : <button onclick = "hardResetClick()">HARD RESET</button>
 		</div>
     
     
-    <div id = "tabM"><br><br><br>
+    <div id = "tabM"><br><br>
       <div id = "navigateMisc">
         <button class = "mBtab1" onclick="tab('tabM.1')">Achievements</button>
         <button class = "mBtab1" onclick="tab('tabM.2')">Statistics</button>
@@ -445,6 +520,11 @@
           <div class="achF" id="ach33D">The first Joule's always the hardest<span class="tooltip">Create a total of 1.331e11 energy.</span></div>
           <div class="achF" id="ach34D">Phone on standby<span class="tooltip">Create at least 2e10 energy in the span of one second.</span></div>
           <div class="achF" id="ach35D">Pseudo-Oganesson<span class="tooltip">Have at least 118 protons and 118 electrons at the same time.</span></div>
+          <div class="achF" id="ach36D">Trillionaire<span class="tooltip">Create a total of at least 1 trillion energy.</span></div>
+          <div class="achF" id="ach37D">Hydrogen machine<span class="tooltip">Create at least 1000 Hydrogen atoms in the span of one minute.</span></div>
+          <div class="achF" id="ach38D">Neutrino expert<span class="tooltip">Have at least 60 neutrinos on hand.</span></div>
+          <div class="achF" id="ach39D">Neutrality<span class="tooltip">Have 1e8 energy on hand without getting any protons or electrons in your current reset.</span></div>
+          <div class="achF" id="ach40D">Medieval Run<span class="tooltip">Have 5e10 energy on hand while never getting any neutrinos or neutrons in your current reset.</span></div>
         </tables>
       </div>
       
@@ -458,7 +538,7 @@
         v1.0 beta: 1-11-2020: Added Hydrogen Atoms (Protium). <br>
         v1.0.1 beta: 1-11-2020: Added the first Basic Atomic Upgrade. <br>
         v1.1 beta: 1-12-2020: Saving now works!<br>
-        v1.2 beta: 3-16-2020: I've been revamping the code for a while, and have gotten pre-prestige to work.<br>
+        v1.2 beta: 3-16-2020: I've been revamping the code for a while, and have gotten pre-prestige to work.<br><br>
         v1.2.1 beta: 3-11-2022 (Yes that's 2022, not 2020): Continued to refactor the code and the 100 protium upgrade now works.<br>
         v1.3: 3-14-2022: Added neutrinos! Also added formatting options and a software license, and fixed many bugs.<br>
         v1.3.1: 3-14-2022: Fixed a bug where the CSS and JS were not recognized by the HTML.<br>
@@ -473,7 +553,13 @@
         <br>v1.6: 3-25-2022: Added Deuterium! Also added 5 new achievements and fixed a bug where hard resetting doesn't reset achievements.
         <br>v1.7: 4-4-2022: Added 6 upgrades! Fixed minor bugs too.
         <br>v1.8: 4-13-2022: Added 6 more upgrades, made cost reductions retroactive, added a confirmation to the Hard Reset button, added a periodic table, and added 5 new achievements!
+        <br>v1.8.1: 4-13-2022: Fixed a visual bug where a sentence spoiling a later upgrade was shown before it was supposed to.
         <br>
+        <br>v1.9: 1-11-2023
+        <br>Added gas containers! You can make H2 gas molecules, and the temperature of the gas container affect the exponents of the neutrino and neutron effects.
+        <br>Buffed upgrades 1-4: 1% -> 3%, 2% -> 4%. Nerfed upgrade 10: 2^other^(1/2) -> 2^other^(1/3).
+        <br>Added 5 new achievements for a total of 40 now.
+        <br>Added a toggle for hotkeys and a few other QoL things.
       </div>
       
       <div id = "tabM.4">
