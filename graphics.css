@@ -149,6 +149,22 @@ body {
   }
 
 
+  button.BgasC1U {
+    width: 256px;
+    height: 256px;
+    border: 4px solid #777777;
+    border-radius: 128px;
+    padding: 8px 8px;
+    font-size: 20px;
+    color: #000000;
+    background-color: #ccee33;
+  }
+  button.BgasC1U:hover {
+    cursor: pointer;
+    background-color: #ddff22;
+  }
+
+
   button.UCannotAfford {
     border: 4px solid #aaaaaa;
     padding: 8px 12px;
@@ -289,6 +305,32 @@ body {
     background-color: #299922;
     cursor: pointer;
   }
+
+
+
+
+
+  .gasContainerTable {
+    display: grid;
+    grid-template-columns: repeat(2, 480px);
+    grid-template-rows: 480px;
+    grid-column-gap: 60px;
+  }
+  
+  .gasContainerLeftSide {
+    border: 4px solid #aaaaaa;
+    border-radius: 240px;
+    background-color: #444444;
+    text-align: center;
+    padding: 140px 24px;
+  }
+
+  .gasContainerRightSide {
+    border: 4px solid #aaaaaa;
+    padding: 20px 20px;
+  }
+
+
   
   
   
@@ -380,6 +422,22 @@ body {
     cursor: pointer;
   }
 
+  .Btab5 {
+    border: 4px solid #aabb22;
+    padding: 8px 20px;
+    margin: 0px -2px;
+    font-size: 20px;
+    font-weight: bold;
+    transform: skew(-10deg);
+    color: #000000;
+    background-color: #ccdd44;
+  }
+  .Btab5:hover {
+    border: 4px solid #77cc33;
+    background-color: #eeff44;
+    cursor: pointer;
+  }
+
   
   
   
@@ -395,13 +453,23 @@ body {
   }
   .mBtab1:hover {
     border: 4px solid #007700;
+    background-color: #ffffff;
+    cursor: pointer;
+  }
+
+  .mBtab3 {
+    border: 4px solid #aabb22;
     padding: 4px 12px;
     margin: 0px -2px;
     font-size: 16px;
     font-weight: bold;
     transform: skew(-10deg);
     color: #000000;
-    background-color: #ffffff;
+    background-color: #ccdd44;
+  }
+  .mBtab3:hover {
+    border: 4px solid #77cc33;
+    background-color: #eeff44;
     cursor: pointer;
   }
 

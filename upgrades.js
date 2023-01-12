@@ -68,7 +68,6 @@ function ru1One() {
     if(Math.round(game.H) >= Math.round(ruBaseCost[0] * Math.pow(1.1, game.ru.id[0]))) {
         game.H = Math.round(game.H) - Math.round(ruBaseCost[0] * Math.pow(1.1, game.ru.id[0]));
         game.ru.id[0]++;
-        game.protonCostMult = (game.protonCostMult - 1) * 0.99 + 1;
         updateHPower();
         updateMass();
         updateProtonCosts();
@@ -102,7 +101,6 @@ function ru1Max() {
         }
     }
     game.ru.id[0] += count;
-    game.protonCostMult = (game.protonCostMult - 1) * Math.pow(0.99, count) + 1;
     updateHPower();
     updateMass();
     updateProtonCosts();
@@ -124,7 +122,6 @@ function ru2One() {
     if(Math.round(game.deu) >= Math.round(ruBaseCost[1] * Math.pow(1.1, game.ru.id[1]))) {
         game.deu = Math.round(game.deu) - Math.round(ruBaseCost[1] * Math.pow(1.1, game.ru.id[1]));
         game.ru.id[1]++;
-        game.electronCostMult = (game.electronCostMult - 1) * 0.99 + 1;
         updateHPower();
         updateMass();
         updateElectronCosts();
@@ -158,7 +155,6 @@ function ru2Max() {
         }
     }
     game.ru.id[1] += count;
-    game.electronCostMult = (game.electronCostMult - 1) * Math.pow(0.99, count) + 1;
     updateHPower();
     updateMass();
     updateElectronCosts();
@@ -180,7 +176,6 @@ function ru3One() {
     if(Math.round(game.energy) >= Math.round(ruBaseCost[2] * Math.pow(1.6, game.ru.id[2]))) {
         game.energy = Math.round(game.energy) - Math.round(ruBaseCost[2] * Math.pow(1.6, game.ru.id[2]));
         game.ru.id[2]++;
-        game.neutrinoCostMult = (game.neutrinoCostMult - 1) * 0.98 + 1;
         updateNeutrinoCosts();
         document.getElementById("energyDisplay").innerHTML = format(game.energy, 0);
         document.getElementById("neutrinoC").innerHTML = format(game.neutrinoCost, 0);
@@ -205,7 +200,6 @@ function ru3Max() {
         }
     }
     game.ru.id[2] += count;
-    game.neutrinoCostMult = (game.neutrinoCostMult - 1) * Math.pow(0.98, count) + 1;
     updateNeutrinoCosts();
     document.getElementById("energyDisplay").innerHTML = format(game.energy, 0);
     document.getElementById("neutrinoC").innerHTML = format(game.neutrinoCost, 0);
@@ -223,9 +217,8 @@ function ru4One() {
         game.deu = Math.round(game.deu) - Math.round(ruBaseCost[3][1] * Math.pow(1.25, game.ru.id[3]));
         game.energy = Math.round(game.energy) - Math.round(ruBaseCost[3][2] * Math.pow(1.5, game.ru.id[3]));
         game.ru.id[3]++;
-        game.neutronCostMult = (game.neutronCostMult - 1) * 0.98 + 1;
         updateHPower();
-        updateNeutronCosts();
+        updateSubatomicCosts();
         updateMass();
         updatePePower();
         document.getElementById("H1D").innerHTML = game.H;
@@ -271,9 +264,8 @@ function ru4Max() {
         }
     }
     game.ru.id[3] += count;
-    game.neutronCostMult = (game.neutronCostMult - 1) * Math.pow(0.98, count) + 1;
     updateHPower();
-    updateNeutronCosts();
+    updateSubatomicCosts();
     updateMass();
     updatePePower();
     document.getElementById("H1D").innerHTML = game.H;
@@ -526,6 +518,15 @@ function nu4Buy() {
     }
   }
 
+  function w4b() {
+    if(game.energy >= 1e8 && game.unlockStage == 3) {
+      game.unlockStage++;
+      game.energy -= 1e8;
+      document.getElementById("energyDisplay").innerHTML = format(game.energy, 0);
+      hideAndShow();
+    }
+  }
+
 
 
 
@@ -711,13 +712,70 @@ function updateUpgradeColors() {
 
 function updateEverything2() {
     updateEverything();
+    document.getElementById("c1g1D").innerHTML = formatGas(game.c1.gases[0]);
+    document.getElementById("c1g2D").innerHTML = formatGas(game.c1.gases[1]);
     updateUpgradeColors();
 }
+
+
+
+
+
+
+
+
+function save() {
+    localStorage.cc = btoa(JSON.stringify(game));
+}
+
+function load(type) {
+  initializeVariables();
+  clearInterval(game.protonInterval);
+    if(localStorage.cc && type == 0) {
+      game = JSON.parse(atob(localStorage.cc));
+      initializeVariables();
+    }
+  else if(type == 0) hardReset();
+  if(!(game.totalEnergy > 0)) hardReset();
+    //transformToDecimal(game);
+  updateEverything();
+  updateProtonSpeed();
+  tab("tab1");
+  initializeVariables();
+  document.hasFocus = true;
+  let a = 0;
+  let b = setInterval(function() {
+    initializeVariables();
+    a++;
+    if(game.c1 != undefined) {
+        clearInterval(b);
+    }
+}, 500)
+}
+
+function exportSave() {
+  let save = btoa(JSON.stringify(game));
+  navigator.clipboard.writeText(save);
+}
+
+function importSave(save) {
+  game = JSON.parse(atob(save));
+  load(1);
+}
+
+
 
 
 setInterval(function() {
         updateUpgradeColors();
 }, 100)
+
+
+setInterval(function()
+              {
+    save();
+    updateEverything2();
+  }, 6969);
 
 
 load(0);
